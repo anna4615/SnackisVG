@@ -1,0 +1,81 @@
+﻿@page
+@model SnackisApp.Pages.ReportModel;
+
+@using Microsoft.AspNetCore.Identity;
+
+@using Areas.Identity.Data;
+
+@inject UserManager<SnackisUser> UserManager;
+
+@{
+    var allUsers = UserManager.Users;
+    SnackisUser user;
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+}
+
+<p>Vill du anmäla det här inlägget?</p>
+
+@if (Model.Post.IsOffensiv == false)
+{
+    <form method="post">
+        <div class="form-group">
+            <input type="submit" value="Anmäl" class="btn btn-primary" />
+        </div>
+    </form>
+
+
+    //Om man ångrar sig kommer man tillbaka till sida med parentinlägg + svar
+    @if (Model.Post.PostId == null)
+    {
+        <a href="/Posts?PostId=@Model.Post.Id">Ångra</a>
+    }
+    else
+    {
+        <a href="/Posts?PostId=@Model.Post.PostId">Ångra</a>
+    }
+
+}
+
+else
+{
+    <p>Inlägget är anmält för olämpligt innehåll.</p>
+
+    //Tillbakalänken leder till parentinlägg + svar
+    @if (Model.Post.PostId == null)
+    {
+        <a href="/Posts?PostId=@Model.Post.Id">Tillbaka</a>
+    }
+    else
+    {
+        <a href="/Posts?PostId=@Model.Post.PostId">Tillbaka</a>
+    }
+}
+
+
+<div class="col mx-3">
+    <div class="border m-2">
+        <div class="m-3">
+            <p class="text-hide m-0">@(user = allUsers.Where(u => u.Id == Model.Post.UserId).FirstOrDefault())</p>
+            @if (user != null)
+            {
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="~/img/@user.Picture" />
+                    <h6 class="mb-1 mx-5">@user.UserName</h6>
+                </div>
+            }
+            else
+            {
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="~/img/default.png" />
+                    <h6 class="mb-1 mx-5">Okänd användare</h6>
+                </div>
+            }
+            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Model.Post.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
+            <div class="row justify-content-between">
+                <h5>@Model.Post.Title</h5>
+            </div>
+            <p">@Model.Post.Text</p>
+        </div>
+    </div>
+</div>
+

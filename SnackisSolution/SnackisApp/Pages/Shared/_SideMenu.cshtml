@@ -1,0 +1,20 @@
+﻿@page
+
+@model IndexModel;
+
+@using Models;
+@inject Gateways.ISubjectGateway _subjectGateway;
+
+@{
+    List<Subject> subjects = _subjectGateway.GetSubjects().Result.ToList();
+}
+
+
+<h5>Ämnen</h5>
+
+@foreach (var subject in subjects)
+{
+    <div>
+        <a asp-page="./Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
+    </div>
+}

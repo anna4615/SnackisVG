@@ -1,0 +1,36 @@
+﻿@page
+@model IndexModel;
+
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+@using SnackisApp.Data;
+
+@inject UserManager<SnackisUser> UserManager;
+
+@{
+    ViewData["Title"] = "Discussion";
+    var allUsers = UserManager.Users;
+}
+
+
+@if (allUsers.Count() == 0)
+{
+    <p class="pt-5">
+        Första gången appen startas måste en användare registrera sig. Den här användaren blir administratör för appen.
+        Fler administratörer kan läggas till senare
+    </p>
+    <a href="/Identity/Account/Register">Registrera en admin</a>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <h6>Innehåll kan skapas via länken</h6>
+    <p>Skapa inte admin innan</p>
+    <p>Tabellerna AspNetUsers, Forum, Subject och Post måste vara tomma</p>
+    <a href="/seeding">Skapa innehåll</a>
+}
+
+

@@ -1,0 +1,71 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+
+@model SnackisApp.Pages.Admin.ForumAdmin.PostsViewModel
+@inject UserManager<SnackisUser> UserManager
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin";
+
+    var Users = UserManager.Users;
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+    SnackisUser user;
+}
+
+<h4>@Model.Subject.Name</h4>
+<p>Alla inlägg</p>
+
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th colspan="2">Skrivet&nbspav</th>
+            <th class="pl-3" ">Tid&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+            <th>Rubrik</th>
+            <th class="pl-3">Text</th>
+            <th class="pl-3"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model.Posts)
+        {
+            user = Users.Where(u => u.Id == post.UserId).FirstOrDefault();
+
+        <tr class="border-bottom">
+            @if (user != null)
+            {
+                <td>
+                    <img style="max-height: 30px" src="/img/@user.Picture" title="Användarbild" alt="Användarbild" />
+                </td>
+                <td>
+                    @user.UserName
+                </td>
+            }
+            else
+            {
+                <td>
+                    <img style="max-height: 30px" src="/img/default.png" title="Användarbild" alt="Användarbild" />
+                </td>
+                <td>Okänd&nbspanvändare</td>
+            }
+            <td class="pl-3">
+                @TimeZoneInfo.ConvertTime(post.Date, timeZone).ToString("g")
+            </td>
+            <td>
+                @post.Title
+            </td>
+            <td class="pl-3">
+                @post.Text
+            </td>
+            <td>
+                <a href="./PostDelete?DeletePostId=@post.Id">radera</a>
+                @*<a asp-page="/PostDelete" asp-route-PostId="@post.Id">Radera</a>*@ @*Det här blir inte en länk, vet inte varför*@
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+

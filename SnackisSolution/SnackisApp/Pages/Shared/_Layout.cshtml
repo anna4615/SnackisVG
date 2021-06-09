@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+@using Models;
+@inject Gateways.ISubjectGateway _subjectGateway;
+@inject Gateways.IForumGateway _forumGateway;
+
+@{
+    ViewData["Title"] = "Home page";
+    List<Subject> subjects = _subjectGateway.GetSubjects().Result.ToList();
+    Forum Forum = _forumGateway.GetForums().Result.ToList().FirstOrDefault();
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SnackisApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Snackis</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Forum</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Användarvillkor</a>
+                        </li>
+                    </ul>
+                </div>
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container pr-3">
+        <partial name="_CookieConsentPartial" />
+        <div class="row">
+            <div class="col-md-auto mr-4 border-right">
+                <h5>Ämnen</h5>
+                @*@<partial name="_SideMenu.cshtml" />*@
+                @foreach (var subject in subjects)
+                {
+                    <div>
+                        <a asp-page="./Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
+                    </div>
+                }
+                <hr />
+                <br />
+                <div>
+                    <a asp-page="/PM/ViewPM">Privata meddelanden</a>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <main role="main" class="pb-3">
+                    @if (Forum != null)
+                    {
+                        <h1 class="text-center">@Forum.Name</h1>
+                    }
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - Snackis - <a asp-area="" asp-page="/Privacy">Användarvillkor</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

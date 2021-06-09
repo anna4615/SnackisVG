@@ -1,0 +1,56 @@
+﻿@page
+@model SnackisApp.Pages.Admin.UserAdmin.RolesModel
+
+@using SnackisApp.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+
+@inject RoleManager<IdentityRole> RoleManager;
+
+@{
+    var allRoles = RoleManager.Roles.OrderBy(r => r.Name).ToList();
+}
+@{
+}
+
+<h1 class="text-center mb-5">Användaradmin</h1>
+
+<h4>Skapa roll</h4>
+
+<div class="col">
+    <div class="row">
+        <form method="post">
+            <div class="form-group">
+                <label for="RoleName">Namn</label>
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Spara roll" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (allRoles.Count != 0)
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>
+                    Roller
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var role in allRoles)
+            {
+                <tr class="border-bottom">
+                    <td>
+                        @Html.DisplayFor(modelItem => role.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}	

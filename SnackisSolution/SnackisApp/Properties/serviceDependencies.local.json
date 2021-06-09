@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "SnackisUsersContextConnection"
+    },
+    "mssql3": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:SnackisContext"
+    },
+    "mssql4": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:SnackisAppContext"
+    }
+  }
+}

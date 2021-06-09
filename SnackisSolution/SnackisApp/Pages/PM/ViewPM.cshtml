@@ -1,0 +1,99 @@
+﻿@page
+@model SnackisApp.Pages.PM.ViewPMModel
+
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+
+@inject UserManager<SnackisUser> _userManager;
+
+@{
+    var allUsers = _userManager.Users.ToList();
+    SnackisUser toUser;
+    SnackisUser fromUser;
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+}
+
+
+<h4 class="text-center">Privata meddelanden</h4>
+
+<div>
+    <a asp-page="/PM/CreatePM">Skicka privat meddelande</a>
+</div>
+
+<div class="col pt-3">
+    <h5>Inkorg</h5>
+ 
+    @foreach (var pm in Model.ReceivedPMs)
+    {
+        fromUser = allUsers.Where(u => u.Id == pm.UserId).FirstOrDefault();
+        <div class="border m-2">
+            <div class="m-3">
+
+                @if (fromUser != null)
+                {
+                    <div class="row mx-0">
+                        <p>Från:</p>
+                        <img class="ml-3" style="max-height: 50px" src="/img/@fromUser.Picture" />
+                        <h6 class="mb-1 mx-3">@fromUser.UserName</h6>
+                        <div class="mx-5">
+                            <a asp-page="/PM/CreatePM" asp-route-PMId="@pm.Id" asp-route-ForUser="@fromUser.UserName">Svara</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row mx-0">
+                        <p>Från:</p>
+                        <img class="ml-3" style="max-height: 50px" src="/img/default.png" />
+                        <h6 class="mb-1 mx-3">Okänd avsändare</h6>
+                        <div class="mx-5">
+                            <p>Det går inte att svara på det här meddelandet</p>
+                        </div>
+                    </div>
+                }
+                <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(pm.Date, timeZone).ToString("g")</p>
+                <h5>@pm.Title</h5>
+                <p>@pm.Text</p>
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="col pt-3">
+    <h5>Skickade meddelanden</h5>
+
+    @foreach (var pm in Model.SentPMs)
+    {
+        toUser = allUsers.Where(u => u.UserName == pm.ToUserName).FirstOrDefault();
+        <div class="border m-2">
+            <div class="m-3">
+
+                @if (toUser != null)
+                {
+                    <div class="row mx-0">
+                        <p>Till:</p>
+                        <img class="ml-3" style="max-height: 50px" src="/img/@toUser.Picture" />
+                        <h6 class="mb-1 mx-3">@toUser.UserName</h6>
+                        @*<div class="mx-5">
+                                <a asp-page="./CreatePost" asp-route-SubjectId="@Model.Subject.Id" asp-route-PostId="@Model.ParentPost.Id">Skriv svar</a>
+                            </div>*@
+                    </div>
+                }
+                else
+                {
+                    <div class="row mx-0">
+                        <img class="ml-3" style="max-height: 50px" src="/img/default.png" />
+                        <h6 class="mb-1 mx-5">Okänd avsändare</h6>
+                        <div class="mx-3">
+                            <p>Det går inte att svara på det här meddelandet</p>
+                        </div>
+                    </div>
+                }
+                <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(pm.Date, timeZone).ToString("g")</p>
+                <h5>@pm.Title</h5>
+                <p>@pm.Text</p>
+            </div>
+        </div>
+    }
+</div>

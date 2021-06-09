@@ -1,0 +1,72 @@
+﻿@page
+@model SnackisApp.Pages.Admin.ForumAdmin.PostDeleteModel
+
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+@using Gateways;
+@using Models;
+
+@inject UserManager<SnackisUser> UserManager;
+@inject ISubjectGateway SubjectGateway; 
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "PostDelete";
+
+    var allUsers = UserManager.Users;
+    var user = allUsers.Where(u => u.Id == Model.Post.UserId).FirstOrDefault();
+    var subjects = await SubjectGateway.GetSubjects();
+
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+}
+
+
+<h1>Radera inlägg</h1>
+<hr />
+
+<h6>Vill du radera det här inlägget och alla dess svar?</h6>
+
+<div class="col px-0">
+    <div class="border m-2">
+        <div class="m-3">
+            <div class="row mx-0">
+                @if (user != null)
+                {
+                    <div class="row mx-0">
+                        <img style="max-height: 50px" src="/img/@user.Picture" />
+                        <h6 class="mb-1 mx-5">@user.UserName</h6>
+                    </div>
+                }
+                else
+                {
+                    <div class="row mx-0">
+                        <img style="max-height: 50px" src="/img/default.png" />
+                        <h6 class="mb-1 mx-5">Okänd användare</h6>
+                    </div>
+                }
+            </div>
+            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Model.Post.Date, timeZone)</p>
+            <h5>Ämne: @subjects.Where(s => s.Id == Model.Post.SubjectId).FirstOrDefault().Name</h5>
+            <h6>@Model.Post.Title</h6>
+            <p>@Model.Post.Text</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <input type="submit" value="Radera" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="./PostsView?SubjectId=@Model.Post.SubjectId">Ångra och gå till listan med ämnets inlägg</a>
+    <br />
+    <a href="./OffensivePosts">Ångra och gå till lista med anmälda inlägg</a>
+    @*<a asp-page="./PostsView" asp-route-SubjectId="@Model.Post.SubjectId">Radera inte</a>*@ @*Alternativ, funkar också*@
+</div>
+
