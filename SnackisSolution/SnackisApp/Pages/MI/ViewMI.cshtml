@@ -1,0 +1,57 @@
+﻿@page
+@model SnackisApp.Pages.MI.ViewMIModel
+
+@using SnackisApp.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<SnackisUser> _userManager;
+
+
+@{
+    var currentUser = _userManager.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+    var selectUser = new SelectList(Model.MembersOnly);
+}
+
+<div class="col">
+    <h4 class="text-center pt-3">Medlemssida</h4>
+
+    <form method="post">
+        <div class="form-group">
+            <select class="custom-select" required asp-for="ShowUserName" asp-items="selectUser">
+                <option value="">Välj medlem</option>
+            </select>
+            <div class="invalid-feedback">Välj medlem</div>
+            @*<span asp-validation-for="ShowUserName" class="text-danger"></span>*@
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Visa info" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+
+@if (Model.ShowUser != null)
+{
+    <div class="col">
+        <div class="border">
+            <div class="m-3">
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="/img/@Model.ShowUser.Picture" />
+                    <h6 class="mb-1 mx-5">@Model.ShowUser.UserName</h6>
+
+                </div>
+                @if (Model.MemberInfo != null)
+                {
+                    <p class="pt-3">@Model.MemberInfo.Text</p>
+                }
+                else
+                {
+                    <p class=" pt-3">Medlemmen har ännu inte skrivit något på sin sida.</p>
+                }
+
+
+            </div>
+        </div>
+    </div>
+}

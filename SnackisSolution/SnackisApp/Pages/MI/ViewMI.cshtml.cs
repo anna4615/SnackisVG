@@ -9,14 +9,14 @@ using SnackisApp.Areas.Identity.Data;
 using SnackisApp.Data;
 using SnackisApp.Models;
 
-namespace SnackisApp.Pages.PM
+namespace SnackisApp.Pages.MI
 {
-    public class CreatePMModel : PageModel
+    public class ViewMIModel : PageModel
     {
         private readonly UserManager<SnackisUser> _userManager;
         private readonly SnackisContext _context;
 
-        public CreatePMModel(
+        public ViewMIModel(
             UserManager<SnackisUser> userManager,
             SnackisContext context)
         {
@@ -25,21 +25,20 @@ namespace SnackisApp.Pages.PM
         }
 
         [BindProperty]
-        public PrivateMessage Message { get; set; }
+        public string ShowUserName { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public int PMId { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public string ForUser { get; set; }
+        public MemberInfo MemberInfo { get; set; }
 
         public List<string> MembersOnly { get; set; }
+
+        public SnackisUser ShowUser { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
             List<SnackisUser> allUsers = _userManager.Users
-                .OrderBy(u => u.UserName)
-                .ToList();
+               .OrderBy(u => u.UserName)
+               .ToList();
 
             MembersOnly = new List<string>();
 
@@ -56,25 +55,31 @@ namespace SnackisApp.Pages.PM
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+       public async Task OnPostAsync()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+           
 
-            Message.UserId = currentUser.Id;
-            Message.Date = DateTime.UtcNow;
-            if (PMId != 0)
+            ShowUser = _userManager.Users
+                .FirstOrDefault(u => u.UserName == ShowUserName);
+
+            MemberInfo = _context.MemberInfo
+                .FirstOrDefault(mi => mi.UserId == ShowUser.Id);
+
+            List<SnackisUser> allUsers = _userManager.Users
+              .OrderBy(u => u.UserName)
+              .ToList();
+
+            MembersOnly = new List<string>();
+
+            foreach (var user in allUsers)
             {
-                Message.PrivateMessageId = PMId;
+                bool isMember = await _userManager.IsInRoleAsync(user, "Medlem");
+
+                if (isMember)
+                {
+                    MembersOnly.Add(user.UserName);
+                }
             }
-            //if (ForUser != null)
-            //{
-            //    Message.ToUserName = ForUser;
-            //}
-
-            await _context.AddAsync(Message);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("/PM/ViewPM");
         }
     }
 }

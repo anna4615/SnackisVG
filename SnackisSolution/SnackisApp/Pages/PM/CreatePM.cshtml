@@ -12,8 +12,7 @@
 @inject SnackisContext _context;
 
 @{
-    var allMembers = _userManager.Users.OrderBy(u => u.UserName).Where(u => u.UserName != "Admin").Select(u => u.UserName).ToArray();
-    var selectUser = new SelectList(allMembers);
+    var selectUser = new SelectList(Model.MembersOnly);
     List<PrivateMessage> messages = _context.PrivateMessage.ToList();
     PrivateMessage pm;
 }
