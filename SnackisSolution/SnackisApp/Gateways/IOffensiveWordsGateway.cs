@@ -14,6 +14,7 @@ namespace SnackisApp.Gateways
         Task PutWord(int editId, OffensiveWord word);
         Task DeleteWord(int deleteId);
 
-        public Task<string> GetCensoredText(string text);
+        Task<string> GetCheckedText(string text);
+
     }
 }

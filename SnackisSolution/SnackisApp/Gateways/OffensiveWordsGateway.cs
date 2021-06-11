@@ -56,7 +56,7 @@ namespace SnackisApp.Gateways
             var respons = await _client.DeleteAsync(_configuration["OffensiveWordsAPI"] + "/" + deleteId);
         }
 
-        public async Task<string> GetCensoredText(string text)
+        public async Task<string> GetCheckedText(string text)
         {
 
             if (string.IsNullOrWhiteSpace(text))

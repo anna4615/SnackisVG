@@ -66,10 +66,6 @@ namespace SnackisApp.Pages.PM
             {
                 Message.PrivateMessageId = PMId;
             }
-            //if (ForUser != null)
-            //{
-            //    Message.ToUserName = ForUser;
-            //}
 
             await _context.AddAsync(Message);
             await _context.SaveChangesAsync();

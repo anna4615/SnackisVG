@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SnackisApp.Areas.Identity.Data;
 using SnackisApp.Data;
 using SnackisApp.Models;
+using SnackisApp.Gateways;
 
 namespace SnackisApp.Pages.MI
 {
@@ -15,13 +16,16 @@ namespace SnackisApp.Pages.MI
     {
         private readonly UserManager<SnackisUser> _userManager;
         private readonly SnackisContext _context;
+        private readonly IOffensiveWordsGateway _offensiveWordsGateway;
 
         public MyMIModel(
             UserManager<SnackisUser> userManager,
-            SnackisContext context)
+            SnackisContext context,
+            IOffensiveWordsGateway offensiveWordsGateway)
         {
             _userManager = userManager;
             _context = context;
+            _offensiveWordsGateway = offensiveWordsGateway;
         }
 
         [BindProperty]
@@ -37,18 +41,22 @@ namespace SnackisApp.Pages.MI
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var userMI = _context.MemberInfo.Where(mi => mi.UserId == currentUser.Id).FirstOrDefault();
+            //Kolla om medlemmen har MI sedan tidigare
+            MemberInfo userMI = _context.MemberInfo.Where(mi => mi.UserId == currentUser.Id).FirstOrDefault();
+
+            string checkedText = await _offensiveWordsGateway.GetCheckedText(MemberInfo.Text);
 
             if (userMI == null)
             {
                 MemberInfo.UserId = currentUser.Id;
+                MemberInfo.Text = checkedText;
                 await _context.AddAsync(MemberInfo);
                 await _context.SaveChangesAsync();
             }
 
             else
             {
-                userMI.Text = MemberInfo.Text;                
+                userMI.Text = checkedText;                
                 await _context.SaveChangesAsync();
             }
 
