@@ -37,13 +37,6 @@ namespace SnackisApp.Pages.Admin.ForumAdmin
 
         public async Task<IActionResult> OnGetAsync()
         {
-            //List<Forum> forums = await _forumGateway.GetForums();
-
-            //if (forums.Count != 0)
-            //{
-            //    Forum = forums.FirstOrDefault();
-            //}
-
             Subjects = await _subjectGateway.GetSubjects();
 
             return Page();
@@ -51,12 +44,6 @@ namespace SnackisApp.Pages.Admin.ForumAdmin
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (newforum.name != null)
-            //{
-            //    await _forumgateway.postforum(newforum);
-            //}
-
-
             if (Subject.Name != null)
             {
                 List<Forum> forums = await _forumGateway.GetForums();

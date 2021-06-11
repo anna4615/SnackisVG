@@ -37,6 +37,7 @@ namespace SnackisApp
             services.AddScoped<IForumGateway, ForumGateway>();
             services.AddScoped<ISubjectGateway, SubjectGateway>();
             services.AddScoped<IPostGateway, PostGateway>();
+            services.AddScoped<IOffensiveWordsGateway, OffensiveWordsGateway>();
             services.AddScoped<Content>();
 
             services.AddHttpClient<ForumGateway>();

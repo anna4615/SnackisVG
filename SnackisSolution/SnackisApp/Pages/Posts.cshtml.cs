@@ -45,6 +45,8 @@ namespace SnackisApp.Pages
             ParentPost = posts.Where(p => p.Id == PostId).FirstOrDefault();
             Answers = posts.Where(p => p.PostId == ParentPost.Id).ToList();
 
+
+
             Subject = await _subjectGateway.GetSubject(ParentPost.SubjectId);
 
             return Page();

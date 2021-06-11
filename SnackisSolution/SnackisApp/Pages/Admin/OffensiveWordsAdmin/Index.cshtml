@@ -1,0 +1,61 @@
+﻿@page
+@model SnackisApp.Pages.Admin.OffensiveWordsAdmin.IndexModel
+
+
+
+@{
+
+}
+
+<h4>Lägg till förbjudet ord</h4>
+
+<div class="col">
+    <div class="row">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="OffensiveWord.Word"></label>
+                <input asp-for="OffensiveWord.Word" class="form-control" />
+                <span asp-validation-for="OffensiveWord.Word" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Words.Count > 0)
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Words[0].Word)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var word in Model.Words)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => word.Word)
+                    </td>
+                    <td>
+                        <a asp-page="./WordEdit" asp-route-WordEditId="@word.Id">Ändra</a> |
+                        <a asp-page="./WordDelete" asp-route-WordDeleteId="@word.Id">Radera</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

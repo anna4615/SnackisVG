@@ -7,29 +7,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SnackisApp.Gateways;
 using SnackisApp.Models;
 
-namespace SnackisApp.Pages.Admin.ForumAdmin
+namespace SnackisApp.Pages.Admin.OffensiveWordsAdmin
 {
-    public class SubjectEditModel : PageModel
+    public class WordDeleteModel : PageModel
     {
-        private readonly ISubjectGateway _subjectGateway;
+        private readonly IOffensiveWordsGateway _wordsGateway;
 
-        public SubjectEditModel(ISubjectGateway subjectGateway)
+        public WordDeleteModel(IOffensiveWordsGateway wordsGateway)
         {
-            _subjectGateway = subjectGateway;
+            _wordsGateway = wordsGateway;
         }
 
         [BindProperty(SupportsGet = true)]
-        public int SubjectEditId { get; set; }
+        public int WordDeleteId { get; set; }
 
         [BindProperty]
-        public Subject Subject { get; set; }
-
+        public OffensiveWord ForbiddenWord { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Subject = await _subjectGateway.GetSubject(SubjectEditId);
+            ForbiddenWord = await _wordsGateway.GetWord(WordDeleteId);
 
-            if (Subject == null)
+            if (ForbiddenWord == null)
             {
                 return NotFound();
             }
@@ -39,9 +38,11 @@ namespace SnackisApp.Pages.Admin.ForumAdmin
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await _subjectGateway.PutSubject(SubjectEditId, Subject);
+            await _wordsGateway.DeleteWord(WordDeleteId);
 
             return RedirectToPage("./Index");
         }
+
+
     }
 }

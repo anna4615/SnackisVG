@@ -34,6 +34,7 @@ namespace SnackisApp.Models
 
         [JsonPropertyName("text")]
         [Display(Name = "Skriv ditt inlägg här")]
+        [Required(ErrorMessage = "Fältet kan inte vara tomt")]
         public string Text { get; set; }
         
         [JsonPropertyName("isOffensiv")]

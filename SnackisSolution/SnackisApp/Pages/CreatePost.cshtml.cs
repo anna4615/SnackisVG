@@ -15,13 +15,16 @@ namespace SnackisApp.Pages
     {
         private readonly UserManager<SnackisUser> _userManager;
         private readonly IPostGateway _postGateway;
+        private readonly IOffensiveWordsGateway _wordsGateway;
 
         public CreatePostModel(
             UserManager<SnackisUser> userManager,
-            IPostGateway postGateway)
+            IPostGateway postGateway,
+            IOffensiveWordsGateway wordsGateway)
         {
             _userManager = userManager;
             _postGateway = postGateway;
+            _wordsGateway = wordsGateway;
         }
 
         public List<Post> Posts { get; set; }
@@ -43,12 +46,27 @@ namespace SnackisApp.Pages
         {
             var user = await _userManager.GetUserAsync(User);
 
+            string censoredTitle = await _wordsGateway.GetCensoredText(Post.Title);
+            string censoredText = await _wordsGateway.GetCensoredText(Post.Text);
+
             Post.UserId = user.Id;
             Post.SubjectId = SubjectId;
+
             if (PostId != 0)
             {
                 Post.PostId = PostId;
             }
+
+            if (string.IsNullOrWhiteSpace(Post.Title))
+            {
+                Post.Title = "-----";
+            }
+            else
+            {
+            Post.Title = censoredTitle;
+            }
+
+            Post.Text = censoredText;
             Post.Date = DateTime.UtcNow;
             Post.IsOffensiv = false;
 

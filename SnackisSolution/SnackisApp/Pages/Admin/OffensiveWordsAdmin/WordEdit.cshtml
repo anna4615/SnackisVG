@@ -1,0 +1,33 @@
+﻿@page
+@model SnackisApp.Pages.Admin.OffensiveWordsAdmin.WordEditModel
+@{
+}
+
+
+<h1>Ändra ord</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ForbiddenWord.Id" />
+            <div class="form-group">
+                <label asp-for="ForbiddenWord.Word" class="control-label"></label>
+                <input asp-for="ForbiddenWord.Word" class="form-control" />
+                <span asp-validation-for="ForbiddenWord.Word" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Tillbaka till lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
