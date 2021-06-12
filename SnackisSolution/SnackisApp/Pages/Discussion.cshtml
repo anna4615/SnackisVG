@@ -31,7 +31,7 @@
 
                 <tr class="border-bottom">
                     <th>
-                        <a asp-page="./Posts" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
+                        <a asp-page="/Thread" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
                     </th>
                     @if (post.Text != null && post.Text.Length > 100)
                     {

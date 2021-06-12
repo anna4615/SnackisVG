@@ -12,14 +12,14 @@
 <div class="col mx-3">
     <div class="border m-2">
         <div class="m-3">
-            <p class="text-hide m-0">@(user = Model.Users.Where(u => u.Id == Model.ParentPost.UserId).FirstOrDefault())</p>
+            <p class="text-hide m-0">@(user = Model.Users.Where(u => u.Id == Model.StartPost.UserId).FirstOrDefault())</p>
             @if (user != null)
             {
                 <div class="row mx-0">
                     <img style="max-height: 50px" src="img/@user.Picture" />
                     <h6 class="mb-1 mx-5">@user.UserName</h6>
                     <div class="mx-5">
-                        <a asp-page="./CreatePost" asp-route-SubjectId="@Model.Subject.Id" asp-route-PostId="@Model.ParentPost.Id">Skriv svar</a>
+                        <a asp-page="./CreatePost" asp-route-SubjectId="@Model.Subject.Id" asp-route-PostId="@Model.StartPost.Id">Skriv svar</a>
                     </div>
                 </div>
             }
@@ -33,19 +33,19 @@
                     </div>
                 </div>
             }
-            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Model.ParentPost.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
+            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Model.StartPost.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
             <div class="row justify-content-between mx-0">
-                <h5>@Model.ParentPost.Title</h5>
-                @if (Model.ParentPost.IsOffensiv)
+                <h5>@Model.StartPost.Title</h5>
+                @if (Model.StartPost.IsOffensiv)
                 {
                     <p class="mr-3 text-danger">Inlägget är anmält för olämpligt innehåll</p>
                 }
                 else
                 {
-                    <a class="mr-3" href="./Report/?ReportPostId=@Model.ParentPost.Id">Anmäl för olämpligt innehåll</a>
+                    <a class="mr-3" href="./Report/?ReportPostId=@Model.StartPost.Id">Anmäl för olämpligt innehåll</a>
                 }
             </div>
-            <p>@Model.ParentPost.Text</p>
+            <p>@Model.StartPost.Text</p>
         </div>
     </div>
 </div>
@@ -73,7 +73,7 @@
                 }
                 <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(post.Date, timeZone).ToString("g")</p>  @* g = Datum + tid utan sekunder*@
                 <div class="row justify-content-between mx-0">
-                    <h6>Svar till inlägg "@Model.ParentPost.Title"</h6>
+                    <h6>Svar till inlägg "@Model.StartPost.Title"</h6>
                     @if (post.IsOffensiv)
                     {
                         <p class="text-danger">Inlägget är anmält för olämpligt innehåll</p>

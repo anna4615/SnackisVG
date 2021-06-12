@@ -39,5 +39,8 @@ namespace SnackisApp.Models
         
         [JsonPropertyName("isOffensiv")]
         public bool IsOffensiv { get; set; }
+
+        [JsonPropertyName("posts")]
+        public List<Post> Posts { get; set; }
     }
 }

@@ -25,14 +25,20 @@ namespace PostsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Post.ToListAsync();
+            var posts = await _context.Post.ToListAsync();
+
+            return posts;
         }
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await _context.Post.FindAsync(id);
+            //var post = await _context.Post.FindAsync(id); //Den här tar inte med Posts i Postens svar
+
+            var posts = await _context.Post.ToListAsync();
+
+            var post = posts.FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {

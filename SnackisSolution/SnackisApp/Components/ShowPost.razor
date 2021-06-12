@@ -1,0 +1,69 @@
+﻿<h6>Inlägg på nivå @Level</h6>
+
+<div class="col mx-3">
+    <div class="border m-2">
+        <div class="m-3">
+            @if (User != null)
+            {
+            <div class="row mx-0">
+                <img style="max-height: 50px" src="img/@User.Picture" />
+                <h6 class="mb-1 mx-5">@User.UserName</h6>
+                @if (Level < 4)
+                {
+                    <div class="mx-5">
+                        <a class="mr-3" href="/CreatePost/?SubjectId=@Subject.Id&PostId=@Post.Id">Skriv svar</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="mx-5">
+                        <p>Det går inte att svara på inlägget, ytterligare nivåer kan inte skapas i tråden</p>
+                    </div>
+                }
+
+            </div>
+            }
+            else
+            {
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="img/default.png" />
+                    <h6 class="mb-1 mx-5">Okänd användare</h6>
+                    <div class="mx-5">
+                        <p>Det går inte att svara på det här inlägget</p>
+                    </div>
+                </div>
+            }
+            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Post.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
+            <div class="row justify-content-between mx-0">
+                <h5>@Post.Title</h5>
+                @if (Post.IsOffensiv)
+                {
+                    <p class="mr-3 text-danger">Inlägget är anmält för olämpligt innehåll</p>
+                }
+                else
+                {
+                    <a class="mr-3" href="./Report/?ReportPostId=@Post.Id">Anmäl för olämpligt innehåll</a>
+                }
+            </div>
+            <p>@Post.Text</p>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public Models.Post Post { get; set; }
+
+    [Parameter]
+    public Models.Subject Subject { get; set; }
+
+    [Parameter]
+    public SnackisApp.Areas.Identity.Data.SnackisUser User { get; set; }
+
+    [Parameter]
+    public int Level { get; set; }
+
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+}

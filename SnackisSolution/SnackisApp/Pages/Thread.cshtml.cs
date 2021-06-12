@@ -11,13 +11,13 @@ using SnackisApp.Models;
 
 namespace SnackisApp.Pages
 {
-    public class PostsModel : PageModel
+    public class ThreadModel : PageModel
     {
         private readonly UserManager<SnackisUser> _userManager;
         private readonly ISubjectGateway _subjectGateway;
         private readonly IPostGateway _postGateway;
 
-        public PostsModel(UserManager<SnackisUser> userManager,
+        public ThreadModel(UserManager<SnackisUser> userManager,
             ISubjectGateway subjectGateway, IPostGateway postGateway)
         {
             _userManager = userManager;
@@ -25,29 +25,17 @@ namespace SnackisApp.Pages
             _postGateway = postGateway;
         }
 
-        public List<SnackisUser> Users { get; set; }
-
-        //public string UserName { get; set; }
-        public List<Post> Answers { get; set; }
         public Post StartPost { get; set; }
-        public Subject Subject { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int PostId { get; set; }
 
-
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGet()
         {
-            Users = _userManager.Users.ToList();
-
-            var posts = await _postGateway.GetPosts();
-
-            StartPost = posts.Where(p => p.Id == PostId).FirstOrDefault();
-            Answers = posts.Where(p => p.PostId == StartPost.Id).ToList();
-
-            Subject = await _subjectGateway.GetSubject(StartPost.SubjectId);
+            StartPost = await _postGateway.GetPost(PostId);
 
             return Page();
         }
+
     }
 }

@@ -17,6 +17,6 @@ namespace SnackisApp.Models
         public string Name { get; set; }
         
         [JsonPropertyName("subjects")]
-        public ICollection<Subject> Subjects { get; set; }
+        public List<Subject> Subjects { get; set; }
     }
 }

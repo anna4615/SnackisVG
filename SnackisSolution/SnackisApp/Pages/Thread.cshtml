@@ -1,0 +1,116 @@
+﻿@page
+@model SnackisApp.Pages.ThreadModel
+
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity;
+@using SnackisApp.Areas.Identity.Data;
+@using SnackisApp.Gateways;
+@using SnackisApp.Models;
+
+
+@inject UserManager<SnackisUser> _userManager;
+@inject ISubjectGateway _subjectGateway;
+@inject IPostGateway _postGateway;
+
+@{
+    List<Post> allPosts = await _postGateway.GetPosts();
+    Subject subject = await _subjectGateway.GetSubject(Model.StartPost.SubjectId);
+    List<SnackisUser> users = _userManager.Users.ToList();
+    SnackisUser user;
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+    bool hasAnswers;
+}
+
+
+<h4 class="text-center">@subject.Name</h4>
+
+<div class="col mx-3">
+    <div class="border m-2">
+        <div class="m-3">
+
+            <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+            @if (user != null)
+            {
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="img/@user.Picture" />
+                    <h6 class="mb-1 mx-5">@user.UserName</h6>
+                    <div class="mx-5">
+                        <a asp-page="./CreatePost" asp-route-SubjectId="@subject.Id" asp-route-PostId="@Model.StartPost.Id">Skriv svar</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="img/default.png" />
+                    <h6 class="mb-1 mx-5">Okänd användare</h6>
+                    <div class="mx-5">
+                        <p>Det går inte att svara på det här inlägget</p>
+                    </div>
+                </div>
+            }
+            <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Model.StartPost.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
+            <div class="row justify-content-between mx-0">
+                <h5>@Model.StartPost.Title</h5>
+                @if (Model.StartPost.IsOffensiv)
+                {
+                    <p class="mr-3 text-danger">Inlägget är anmält för olämpligt innehåll</p>
+                }
+                else
+                {
+                    <a class="mr-3" href="./Report/?ReportPostId=@Model.StartPost.Id">Anmäl för olämpligt innehåll</a>
+                }
+            </div>
+            <p>@Model.StartPost.Text</p>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.StartPost.Posts != null)
+{
+    List<Post> answers1 = Model.StartPost.Posts;
+    foreach (Post postLevel1 in answers1)
+    {
+        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+        <div class="ml-1 pl-1">
+            <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel1' param-Subject='@subject' param-User="@user" param-level="2" />
+        </div>
+        if (postLevel1.Posts != null)
+        {
+            List<Post> answers2 = postLevel1.Posts;
+            foreach (Post postLevel2 in answers2)
+            {
+                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                <div class="ml-2 pl-2">
+                    <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel2' param-Subject='@subject' param-User="@user" param-level="3" />
+                </div>
+                if (postLevel2.Posts != null)
+                {
+                    List<Post>
+                        answers3 = postLevel2.Posts;
+                    foreach (Post postLevel3 in answers3)
+                    {
+                        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                        <div class="ml-3 pl-3">
+                            <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel3' param-Subject='@subject' param-User="@user" param-level="4" />
+                        </div>
+                        if (postLevel3.Posts != null)
+                        {
+                            List<Post>
+                                answers4 = postLevel3.Posts;
+                            foreach (Post postLevel4 in answers4)
+                            {
+                                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                                <div class="ml-4 pl-4">
+                                    <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel4' param-Subject='@subject' param-User="@user" param-level="5" />
+                                </div>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

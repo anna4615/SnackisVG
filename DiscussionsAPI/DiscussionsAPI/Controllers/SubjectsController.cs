@@ -32,7 +32,10 @@ namespace PostsAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> GetSubject(int id)
         {
-            var subject = await _context.Subject.FindAsync(id);
+            //var subject = await _context.Subject.FindAsync(id);
+
+            var subjects = await _context.Subject.ToListAsync();
+            var subject = subjects.FirstOrDefault(s => s.Id == id);
 
             if (subject == null)
             {
