@@ -30,6 +30,7 @@ namespace SnackisApp.Pages
         [BindProperty(SupportsGet = true)]
         public int PostId { get; set; }
 
+        
         public async Task<IActionResult> OnGet()
         {
             StartPost = await _postGateway.GetPost(PostId);

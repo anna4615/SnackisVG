@@ -36,7 +36,13 @@ namespace SnackisApp.Models
         [Display(Name = "Skriv ditt inlägg här")]
         [Required(ErrorMessage = "Fältet kan inte vara tomt")]
         public string Text { get; set; }
+
+        [JsonPropertyName("numberOfLike")]
+        public int NumberOfLike { get; set; }
         
+        [JsonPropertyName("numberOfLove")]
+        public int NumberOfLove { get; set; }
+
         [JsonPropertyName("isOffensiv")]
         public bool IsOffensiv { get; set; }
 
@@ -46,5 +52,8 @@ namespace SnackisApp.Models
         [JsonPropertyName("images")]
         [Display(Name = "Bild")]
         public List<PostImage> Images { get; set; }
+
+
+
     }
 }

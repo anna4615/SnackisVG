@@ -14,5 +14,6 @@ namespace SnackisApp.Gateways
         Task PutPost(int editId, Post post);
         Task<Post> DeletePost(int deleteId);
         Task<PostImage> PostPostImage(PostImage image);
+        Task<Post> GetStartPostId(int id);
     }
 }

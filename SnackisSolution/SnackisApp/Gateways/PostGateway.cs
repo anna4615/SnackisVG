@@ -67,5 +67,25 @@ namespace SnackisApp.Gateways
 
             return returnValue;
         }
+
+        public async Task<Post> GetStartPostId(int id)
+        {
+            Post post = new Post();
+
+            while (true)
+            {
+                post = await GetPost(id);
+                if (post.PostId == null)
+                {
+                    break;
+                }
+                else
+                {
+                    id = (int)post.PostId;
+                }
+            }
+
+            return post;
+        }
     }
 }

@@ -27,11 +27,11 @@
     //Om man ångrar sig kommer man tillbaka till sida med parentinlägg + svar
     @if (Model.Post.PostId == null)
     {
-        <a href="/Posts?PostId=@Model.Post.Id">Ångra</a>
+        <a href="/Thread?PostId=@Model.Post.Id">Ångra</a>
     }
     else
     {
-        <a href="/Posts?PostId=@Model.Post.PostId">Ångra</a>
+        <a href="/Thread?PostId=@Model.Post.PostId">Ångra</a>
     }
 
 }
@@ -43,11 +43,11 @@ else
     //Tillbakalänken leder till parentinlägg + svar
     @if (Model.Post.PostId == null)
     {
-        <a href="/Posts?PostId=@Model.Post.Id">Tillbaka</a>
+        <a href="/Thread?PostId=@Model.Post.Id">Tillbaka</a>
     }
     else
     {
-        <a href="/Posts?PostId=@Model.Post.PostId">Tillbaka</a>
+        <a href="/Thread?PostId=@Model.Post.PostId">Tillbaka</a>
     }
 }
 

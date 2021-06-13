@@ -332,3 +332,18 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+OffensiveWords/OffensiveWordsAPI/Properties/serviceDependencies.annawordapi - Web Deploy.json
+OffensiveWords/OffensiveWordsAPI/Properties/serviceDependencies.annawordapi - Web Deploy2.json
+OffensiveWords/OffensiveWordsAPI/Properties/serviceDependencies.annawordsapi - Web Deploy.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy/mssql1.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy/mssql2.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy/profile.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy1/profile.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy2/mssql1.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy2/mssql2.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordapi - Web Deploy2/profile.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordsapi - Web Deploy/mssql2.arm.json
+OffensiveWords/OffensiveWordsAPI/Properties/ServiceDependencies/annawordsapi - Web Deploy/profile.arm.json
+SnackisSolution/SnackisApp/Properties/serviceDependencies.annasnackisvg - Web Deploy.json
+SnackisSolution/SnackisApp/Properties/ServiceDependencies/annasnackisvg - Web Deploy/mssql2.arm.json
+SnackisSolution/SnackisApp/Properties/ServiceDependencies/annasnackisvg - Web Deploy/profile.arm.json

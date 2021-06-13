@@ -78,14 +78,6 @@ namespace SnackisApp.Pages
             Post.Date = DateTime.UtcNow;
             Post.IsOffensiv = false;
 
-            //if (UploadedImages != null)
-            //{
-            //    foreach (var image in UploadedImages)
-            //    {
-            //        Post.Images.Add(image.FileName);
-            //    }
-            //}
-
             Post createdPost = await _postGateway.PostPost(Post);
 
             if (UploadedImages != null)
@@ -107,7 +99,19 @@ namespace SnackisApp.Pages
                 }
             }
 
-            return Redirect($"/Discussion?SubjectId={SubjectId}");
+            Post startPost = new Post();
+
+            if (createdPost.PostId != null)
+            {
+                int id = (int)createdPost.PostId;
+                startPost = await _postGateway.GetStartPostId(id);
+            }
+            else
+            {
+                startPost = createdPost;
+            }
+
+            return Redirect($"/Thread?PostId={startPost.Id}");
         }
     }
 }

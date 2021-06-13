@@ -13,11 +13,12 @@ namespace PostsAPI.Models
         public Subject Subject { get; set; }
         public string Title { get; set; }
         public int? PostId { get; set; }
-        public ICollection<Post> Posts { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }
+        public int NumberOfLike { get; set; }
+        public int NumberOfLove { get; set; }
         public bool IsOffensiv { get; set; } = false;
-
         public ICollection<PostImage> Images { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }
