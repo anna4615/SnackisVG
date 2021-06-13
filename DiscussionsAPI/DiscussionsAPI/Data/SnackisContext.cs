@@ -20,6 +20,8 @@ namespace PostsAPI.Data
 
         public DbSet<PostsAPI.Models.Forum> Forum { get; set; }
 
+        public DbSet<PostsAPI.Models.PostImage> PostImage { get; set; }
+
 
     }
 }

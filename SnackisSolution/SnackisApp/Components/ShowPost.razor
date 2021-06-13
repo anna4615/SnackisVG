@@ -1,4 +1,4 @@
-﻿<h6>Inlägg på nivå @Level</h6>
+﻿@*<h6>Inlägg på nivå @Level</h6>*@
 
 <div class="col mx-3">
     <div class="border m-2">
@@ -46,6 +46,12 @@
                 }
             </div>
             <p>@Post.Text</p>
+            <div class="row">
+                @foreach (var image in Post.Images)
+                {
+                    <img class="mx-1" style="max-height: 100px" src="postimg/@image.FileName" />
+                }
+            </div>
         </div>
     </div>
 </div>

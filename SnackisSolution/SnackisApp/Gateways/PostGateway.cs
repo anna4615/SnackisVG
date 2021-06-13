@@ -59,5 +59,13 @@ namespace SnackisApp.Gateways
         {
             var respons = await _client.PutAsJsonAsync(_configuration["PostsAPI"] + "/" + editId, post);
         }
+
+        public async Task<PostImage> PostPostImage(PostImage image)
+        {
+            var response = await _client.PostAsJsonAsync(_configuration["PostImagesAPI"], image);
+            PostImage returnValue = await response.Content.ReadFromJsonAsync<PostImage>();
+
+            return returnValue;
+        }
     }
 }

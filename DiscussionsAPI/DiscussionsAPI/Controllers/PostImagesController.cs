@@ -12,50 +12,47 @@ namespace PostsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjectsController : ControllerBase
+    public class PostImagesController : ControllerBase
     {
         private readonly SnackisContext _context;
 
-        public SubjectsController(SnackisContext context)
+        public PostImagesController(SnackisContext context)
         {
             _context = context;
         }
 
-        // GET: api/Subjects
+        // GET: api/PostImages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subject>>> GetSubject()
+        public async Task<ActionResult<IEnumerable<PostImage>>> GetPostImage()
         {
-            return await _context.Subject.ToListAsync();
+            return await _context.PostImage.ToListAsync();
         }
 
-        // GET: api/Subjects/5
+        // GET: api/PostImages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Subject>> GetSubject(int id)
+        public async Task<ActionResult<PostImage>> GetPostImage(int id)
         {
-            var subject = await _context.Subject.FindAsync(id);
+            var postImage = await _context.PostImage.FindAsync(id);
 
-            //var subjects = await _context.Subject.ToListAsync();
-            //var subject = subjects.FirstOrDefault(s => s.Id == id); //får ändå inte med posts
-
-            if (subject == null)
+            if (postImage == null)
             {
                 return NotFound();
             }
 
-            return subject;
+            return postImage;
         }
 
-        // PUT: api/Subjects/5
+        // PUT: api/PostImages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSubject(int id, Subject subject)
+        public async Task<IActionResult> PutPostImage(int id, PostImage postImage)
         {
-            if (id != subject.Id)
+            if (id != postImage.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(subject).State = EntityState.Modified;
+            _context.Entry(postImage).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +60,7 @@ namespace PostsAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SubjectExists(id))
+                if (!PostImageExists(id))
                 {
                     return NotFound();
                 }
@@ -76,36 +73,36 @@ namespace PostsAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Subjects
+        // POST: api/PostImages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Subject>> PostSubject(Subject subject)
+        public async Task<ActionResult<PostImage>> PostPostImage(PostImage postImage)
         {
-            _context.Subject.Add(subject);
+            _context.PostImage.Add(postImage);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);
+            return CreatedAtAction("GetPostImage", new { id = postImage.Id }, postImage);
         }
 
-        // DELETE: api/Subjects/5
+        // DELETE: api/PostImages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubject(int id)
+        public async Task<IActionResult> DeletePostImage(int id)
         {
-            var subject = await _context.Subject.FindAsync(id);
-            if (subject == null)
+            var postImage = await _context.PostImage.FindAsync(id);
+            if (postImage == null)
             {
                 return NotFound();
             }
 
-            _context.Subject.Remove(subject);
+            _context.PostImage.Remove(postImage);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool SubjectExists(int id)
+        private bool PostImageExists(int id)
         {
-            return _context.Subject.Any(e => e.Id == id);
+            return _context.PostImage.Any(e => e.Id == id);
         }
     }
 }

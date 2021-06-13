@@ -25,7 +25,7 @@ namespace PostsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            var posts = await _context.Post.ToListAsync();
+            var posts = await _context.Post.Include(p => p.Images).ToListAsync();
 
             return posts;
         }
@@ -36,7 +36,7 @@ namespace PostsAPI.Controllers
         {
             //var post = await _context.Post.FindAsync(id); //Den här tar inte med Posts i Postens svar
 
-            var posts = await _context.Post.ToListAsync();
+            var posts = await _context.Post.Include(p => p.Images).ToListAsync();
 
             var post = posts.FirstOrDefault(p => p.Id == id);
 
@@ -50,10 +50,10 @@ namespace PostsAPI.Controllers
 
 
         // GET: api/Posts/parentposts/2
-        [HttpGet("parentposts/{parentId}")]
+        [HttpGet("answers/{parentId}")]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts(int parentId)
         {
-            List<Post> answers = await _context.Post.Where(p => p.PostId == parentId).ToListAsync();
+            List<Post> answers = await _context.Post.Include(p => p.Images).Where(p => p.PostId == parentId).ToListAsync();
             return answers;
         }
 
@@ -62,7 +62,7 @@ namespace PostsAPI.Controllers
         [HttpGet("subjectname/name")]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts(string name)
         {
-            List<Post> posts = await _context.Post.Where(p => p.Subject.Name == name).ToListAsync();
+            List<Post> posts = await _context.Post.Include(p => p.Images).Where(p => p.Subject.Name == name).ToListAsync();
             return posts;
         }
 

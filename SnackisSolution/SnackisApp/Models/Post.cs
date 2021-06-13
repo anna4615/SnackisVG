@@ -42,5 +42,9 @@ namespace SnackisApp.Models
 
         [JsonPropertyName("posts")]
         public List<Post> Posts { get; set; }
+
+        [JsonPropertyName("images")]
+        [Display(Name = "Bild")]
+        public List<PostImage> Images { get; set; }
     }
 }

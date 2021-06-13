@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostsAPI.Data;
 
 namespace PostsAPI.Migrations
 {
     [DbContext(typeof(SnackisContext))]
-    partial class SnackisContextModelSnapshot : ModelSnapshot
+    [Migration("20210613091654_PostImage")]
+    partial class PostImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,6 +46,9 @@ namespace PostsAPI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsOffensiv")
                         .HasColumnType("bit");
 
@@ -69,26 +74,6 @@ namespace PostsAPI.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Post");
-                });
-
-            modelBuilder.Entity("PostsAPI.Models.PostImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostImage");
                 });
 
             modelBuilder.Entity("PostsAPI.Models.Subject", b =>
@@ -126,15 +111,6 @@ namespace PostsAPI.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("PostsAPI.Models.PostImage", b =>
-                {
-                    b.HasOne("PostsAPI.Models.Post", null)
-                        .WithMany("Images")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PostsAPI.Models.Subject", b =>
                 {
                     b.HasOne("PostsAPI.Models.Forum", "Forum")
@@ -153,8 +129,6 @@ namespace PostsAPI.Migrations
 
             modelBuilder.Entity("PostsAPI.Models.Post", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("Posts");
                 });
 

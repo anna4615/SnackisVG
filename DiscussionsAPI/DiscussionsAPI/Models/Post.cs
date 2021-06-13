@@ -17,5 +17,7 @@ namespace PostsAPI.Models
         public DateTime Date { get; set; }
         public string Text { get; set; }
         public bool IsOffensiv { get; set; } = false;
+
+        public ICollection<PostImage> Images { get; set; }
     }
 }
