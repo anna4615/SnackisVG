@@ -20,6 +20,8 @@ namespace SnackisApp.Data
         public DbSet<PrivateMessage> PrivateMessage { get; set; }
         public DbSet<MemberInfo> MemberInfo { get; set; }
 
+        public DbSet<Group> Group { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SnackisApp.Models;
 
 namespace SnackisApp.Areas.Identity.Data
 {
@@ -21,7 +22,9 @@ namespace SnackisApp.Areas.Identity.Data
         public string LastName { get; set; }
 
         [PersonalData]
-        public string Picture { get; set; }     
+        public string Picture { get; set; }
+
+        public ICollection<Group> Groups { get; set; }
 
     }
 }

@@ -49,9 +49,9 @@
                 @*@<partial name="_SideMenu.cshtml" />*@
                 @foreach (var subject in subjects)
                 {
-    <div>
-        <a asp-page="/Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
-    </div>}
+                    <div>
+                        <a asp-page="/Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
+                    </div>}
                 <hr />
                 <br />
                 <div>
@@ -63,7 +63,9 @@
                 <div>
                     <a asp-page="/MI/MyMI">Min medlemssida</a>
                 </div>
-
+                <div>
+                    <a asp-page="/GM/Index">Grupper</a>
+                </div>
 
             </div>
 

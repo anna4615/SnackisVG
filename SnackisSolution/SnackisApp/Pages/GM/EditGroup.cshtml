@@ -1,0 +1,27 @@
+﻿@page
+@model SnackisApp.Pages.GM.EditGroupModel
+
+
+@{
+    var selectMember = new SelectList(Model.UserNames);
+}
+
+
+<h4>Välj medlemmar</h4>
+
+<div class="col">
+    <form method="post">
+
+        <div class="form-group">
+            <select class="form-control" multiple asp-for="NewMemberNames" asp-items="selectMember">
+                <option value=""></option>
+            </select>
+            <span asp-validation-for="NewMemberNames" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Spara" class="btn btn-primary" />
+        </div>
+
+    </form>
+</div>

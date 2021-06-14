@@ -18,6 +18,7 @@ namespace PostsAPI.Models
         public int NumberOfLike { get; set; }
         public int NumberOfLove { get; set; }
         public bool IsOffensiv { get; set; } = false;
+        public int? GroupId { get; set; }
         public ICollection<PostImage> Images { get; set; }
         public ICollection<Post> Posts { get; set; }
     }
