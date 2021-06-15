@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PostsAPI.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PostsAPI
 {
@@ -36,9 +38,8 @@ namespace PostsAPI
             });
 
             services.AddDbContext<SnackisContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("LocalSnackisContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("LocalSnackisContext")));       
 
-         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

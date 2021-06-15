@@ -4,13 +4,13 @@
       "type": "mssql",
       "connectionId": "ForumContext"
     },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "SnackisContext"
-    },
     "mssql3": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:SnackisContext"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "SnackisContext"
     }
   }
 }

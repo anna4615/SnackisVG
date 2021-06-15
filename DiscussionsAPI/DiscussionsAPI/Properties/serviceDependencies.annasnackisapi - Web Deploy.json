@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/snackisappdbserver/databases/SnackisApp_db",
+      "type": "mssql.azure",
+      "connectionId": "SnackisContext",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

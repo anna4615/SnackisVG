@@ -34,11 +34,10 @@ namespace PostsAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            //var post = await _context.Post.FindAsync(id); //Den här tar inte med Posts i Postens svar
+            var post = await _context.Post.Include(p => p.Images).Include(p => p.Posts).FirstOrDefaultAsync(p => p.Id == id); ////Den här tar inte med Posts i Postens svar
 
-            var posts = await _context.Post.Include(p => p.Images).ToListAsync();
-
-            var post = posts.FirstOrDefault(p => p.Id == id);
+            //var posts = await _context.Post.Include(p => p.Images).ToListAsync();
+            //var post = posts.FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {
@@ -62,7 +61,14 @@ namespace PostsAPI.Controllers
         [HttpGet("subjectname/name")]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts(string name)
         {
-            List<Post> posts = await _context.Post.Include(p => p.Images).Where(p => p.Subject.Name == name).ToListAsync();
+            var subject = await _context.Subject.FirstOrDefaultAsync(s => s.Name == name);
+
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            List<Post> posts = await _context.Post.Include(p => p.Images).Where(p => p.SubjectId == subject.Id).ToListAsync();
             return posts;
         }
 

@@ -25,18 +25,15 @@ namespace PostsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetSubject()
         {
-            return await _context.Subject.ToListAsync();
+            return await _context.Subject.Include(s => s.Posts).ThenInclude(p => p.Images).ToListAsync();
         }
 
         // GET: api/Subjects/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> GetSubject(int id)
         {
-            var subject = await _context.Subject.FindAsync(id);
-
-            //var subjects = await _context.Subject.ToListAsync();
-            //var subject = subjects.FirstOrDefault(s => s.Id == id); //får ändå inte med posts
-
+            var subject = await _context.Subject.Include(s => s.Posts).ThenInclude(p => p.Images).FirstOrDefaultAsync(s => s.Id == id);
+           
             if (subject == null)
             {
                 return NotFound();

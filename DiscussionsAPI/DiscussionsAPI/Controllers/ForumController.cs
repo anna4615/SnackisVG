@@ -25,14 +25,14 @@ namespace PostsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Forum>>> GetForum()
         {
-            return await _context.Forum.ToListAsync();
+            return await _context.Forum.Include(f => f.Subjects).ThenInclude(s => s.Posts).ThenInclude(p => p.Images).ToListAsync();
         }
 
         // GET: api/Forum/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Forum>> GetForum(int id)
         {
-            var forum = await _context.Forum.FindAsync(id);
+            var forum = await _context.Forum.Include(f => f.Subjects).ThenInclude(s => s.Posts).ThenInclude(p => p.Images).FirstOrDefaultAsync(f => f.Id == id);
 
             if (forum == null)
             {
