@@ -12,6 +12,8 @@ using SnackisApp.HelpMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SnackisApp
@@ -32,7 +34,7 @@ namespace SnackisApp
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            });           
 
             services.AddScoped<IForumGateway, ForumGateway>();
             services.AddScoped<ISubjectGateway, SubjectGateway>();
@@ -63,9 +65,9 @@ namespace SnackisApp
             });
 
             services.AddDbContext<SnackisContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext")));     
+                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext")));
 
-          
+
 
         }
 

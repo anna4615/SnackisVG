@@ -1,6 +1,8 @@
 ﻿@page
 @model SnackisApp.Pages.GM.CreateGroupModel
+
 @{
+    var selectMembers = new SelectList(Model.UserNames);
 }
 
 
@@ -13,6 +15,13 @@
             <label asp-for="Group.Name"></label>
             <input asp-for="Group.Name" class="form-control" />
             <span asp-validation-for="Group.Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control" multiple asp-for="MemberNames" asp-items="selectMembers">
+                @*<option value=""></option>*@
+            </select>
+            <span asp-validation-for="MemberNames" class="text-danger"></span>
         </div>
 
         <div class="form-group">

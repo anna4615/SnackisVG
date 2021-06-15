@@ -24,6 +24,8 @@ namespace SnackisApp.Areas.Identity
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<SnackisContext>();
             });
+
+
         }
     }
 }

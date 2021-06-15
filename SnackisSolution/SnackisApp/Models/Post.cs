@@ -19,9 +19,6 @@ namespace SnackisApp.Models
         [JsonPropertyName("subjectId")]
         public int SubjectId { get; set; }
         
-        [JsonPropertyName("subject")]
-        public Subject Subject { get; set; }
-        
         [JsonPropertyName("postId")]
         public int? PostId { get; set; }
         

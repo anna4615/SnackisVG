@@ -3,25 +3,50 @@
 
 
 @{
-    var selectMember = new SelectList(Model.UserNames);
+    var selectNewMembers = new SelectList(Model.NotInGroupNames);
+    var members = new SelectList(Model.MemberNames);
 }
 
 
-<h4>Välj medlemmar</h4>
+<h4>Lägg till medlemmar</h4>
 
 <div class="col">
     <form method="post">
-
         <div class="form-group">
-            <select class="form-control" multiple asp-for="NewMemberNames" asp-items="selectMember">
-                <option value=""></option>
+            <select class="form-control" multiple asp-for="AddMemberNames" asp-items="selectNewMembers">
+                @*<option value=""></option>*@
             </select>
-            <span asp-validation-for="NewMemberNames" class="text-danger"></span>
+            <span asp-validation-for="AddMemberNames" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Spara" class="btn btn-primary" />
+            <input type="submit" value="Lägg till" class="btn btn-primary" />
+        </div>
+    </form>
+    <a href="./index">Tillbaka</a>
+</div>
+
+<br />
+<br />
+
+
+<h4>Ta bort medlemmar</h4>
+
+<div class="col">
+    <form method="post">
+        <div class="form-group">
+            <select class="form-control" multiple asp-for="DeleteMemberNames" asp-items="members">
+                @*<option value=""></option>*@
+            </select>
+            <span asp-validation-for="DeleteMemberNames" class="text-danger"></span>
         </div>
 
+        <div class="form-group">
+            <input type="submit" value="Ta bort" class="btn btn-primary" />
+        </div>
     </form>
 </div>
+
+<br />
+<br />
+<a href="./index">Tillbaka</a>

@@ -1,0 +1,27 @@
+﻿@using Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<SnackisUser> _userManager;
+
+@code {
+    [Parameter]
+    public Models.Group Group { get; set; }
+
+    [Parameter]
+    public SnackisUser CurrentUser { get; set; }
+
+    [Parameter]
+    public List<SnackisUser> AllUsers { get; set; }
+}
+<h3>ShowGroup</h3>
+<div class="col">
+
+    <h5>@Group.Name</h5>
+    <p>Skapad av: @CurrentUser.UserName</p>
+    <h6>Medlemmar</h6>
+    @foreach (var member in Group.Members)
+    {
+        <p>@member.UserName.</p>
+    }
+
+</div>

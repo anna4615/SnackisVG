@@ -5,11 +5,11 @@
 @using Areas.Identity.Data;
 @using SnackisApp.Data;
 
-@inject UserManager<SnackisUser> UserManager;
+@inject UserManager<SnackisUser> _userManager;
 
 @{
     ViewData["Title"] = "Discussion";
-    var allUsers = UserManager.Users;
+    var allUsers = _userManager.Users;
 }
 
 

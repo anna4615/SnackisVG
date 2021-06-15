@@ -26,43 +26,63 @@ namespace SnackisApp.Pages.GM
         }
 
         [BindProperty(SupportsGet = true)]
-        public int GroupId { get; set; }
+        public int GroupEditId { get; set; }
 
         [BindProperty]
-        public List<string> NewMemberNames { get; set; }
-        public List<string> UserNames { get; set; }
+        public List<string> AddMemberNames { get; set; }
 
+        [BindProperty]
+        public List<string> DeleteMemberNames { get; set; }
 
+        public List<string> MemberNames { get; set; }
+        public List<string> NotInGroupNames { get; set; }
+
+        public Group SelectedGroup { get; set; }
+        public string GroupName { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            SelectedGroup = await _context.Group.Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == GroupEditId);
+            GroupName = SelectedGroup.Name;
+            MemberNames = SelectedGroup.Members.Select(m => m.UserName).ToList();
 
-            UserNames = await GetMemberNames();
+            NotInGroupNames = await GetNewUserNames();
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            foreach (var name in NewMemberNames)
+            if (AddMemberNames.Count != 0)
             {
-                await AddMemberToGroup(name);
+                foreach (var name in AddMemberNames)
+                {
+                    await AddMemberToGroup(name);
+                }
+            }
+
+            if (DeleteMemberNames.Count != 0)
+            {
+                foreach (var name in DeleteMemberNames)
+                {
+                    await DeleteMemberFromGroup(name);
+                }
             }
 
             return Redirect("./index");
-        }
+        }       
 
 
-
-        private async Task<List<string>> GetMemberNames()
+        // Hämta Username för users som inte redan är med i gruppen
+        private async Task<List<string>> GetNewUserNames()
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+
             List<SnackisUser> allUsers = _userManager.Users
                .OrderBy(u => u.UserName)
                .ToList();
 
-            Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == 1);
-            //Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == GroupId);
+            Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == GroupEditId);
             List<SnackisUser> existingMembers = group.Members.ToList();
 
             var userNames = new List<string>();
@@ -71,8 +91,9 @@ namespace SnackisApp.Pages.GM
             {
                 bool isForumMember = await _userManager.IsInRoleAsync(user, "Medlem");
                 bool notInGroup = existingMembers.FirstOrDefault(m => m.Id == user.Id) == null;
+                bool isCurrentUser = currentUser.UserName == user.UserName;
 
-                if (isForumMember && notInGroup)
+                if (isForumMember && notInGroup && isCurrentUser == false)
                 {
                     userNames.Add(user.UserName);
                 }
@@ -84,14 +105,23 @@ namespace SnackisApp.Pages.GM
 
         private async Task AddMemberToGroup(string newMemberName)
         {
-            Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == 1);
-            //Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == GroupId);
+            Group group = await _context.Group.Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == GroupEditId);
 
-            SnackisUser newMember = _userManager.Users.FirstOrDefault(u => u.UserName == newMemberName);
+            SnackisUser addMember = _userManager.Users.FirstOrDefault(u => u.UserName == newMemberName);
 
-            group.Members.Add(newMember);
+            group.Members.Add(addMember);
             await _context.SaveChangesAsync();
 
+        }
+
+        private async Task DeleteMemberFromGroup(string deleteMemberName)
+        {
+            Group group = await _context.Group.Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == GroupEditId);
+
+            SnackisUser deleteMember = _userManager.Users.FirstOrDefault(u => u.UserName == deleteMemberName);
+
+            group.Members.Remove(deleteMember);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,9 +1,37 @@
 ﻿@page
 @model SnackisApp.Pages.GM.IndexModel
+
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+@using SnackisApp.Data;
+@using Microsoft.EntityFrameworkCore;
+
+
+@*@inject UserManager<SnackisUser> _userManager;
+@inject SnackisContext _context;*@
+
 @{
+//List<SnackisUser> allUsers = _userManager.Users.ToList();
+//SnackisUser currentUser = await _userManager.GetUserAsync(User);
+//List<SnackisUser> members;
+//var allGroups = _context.Group.Include(g => g.Members).ToList();
 }
 
 
 <div>
     <a asp-page="/GM/CreateGroup">Skapa ny grupp</a>
 </div>
+
+<br />
+<br />
+
+<h6>Grupper skapade av mig</h6>
+
+@foreach (var group in Model.MyGroups)
+{
+<div>
+    <a href="/GM/EditGroup?GroupEditId=@group.Id">@group.Name</a>
+</div>
+
+}
+

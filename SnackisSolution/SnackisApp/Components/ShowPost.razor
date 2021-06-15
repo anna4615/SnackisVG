@@ -1,36 +1,55 @@
-﻿@*<h6>Inlägg på nivå @Level</h6>*@
+﻿
+@code {
+    [Parameter]
+    public Models.Post Post { get; set; }
+
+    [Parameter]
+    public Models.Subject Subject { get; set; }
+
+    [Parameter]
+    public SnackisApp.Areas.Identity.Data.SnackisUser User { get; set; }
+
+    [Parameter]
+    public int Level { get; set; }
+
+    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+}
+
+
+
+@*<h6>Inlägg på nivå @Level</h6>*@
 
 <div class="col mx-3">
     <div class="border m-2">
         <div class="m-3">
             @if (User != null)
             {
-            <div class="row mx-0">
-                <img style="max-height: 50px" src="img/@User.Picture" />
-                <h6 class="mb-1 mx-5">@User.UserName</h6>
+                <div class="row mx-0">
+                    <img style="max-height: 50px" src="img/@User.Picture" />
+                    <h6 class="mb-1 mx-5">@User.UserName</h6>
 
                     <a class="mx-2" href="/EditPost/?LikePostId=@Post.Id"><img style="max-height: 20px" src="/img/like_PNG44.png" /></a>
                     <p class="mr-3">@Post.NumberOfLike</p>
                     <a class="mx-2" href="/EditPost/?LovePostId=@Post.Id"><img style="max-height: 20px" src="/img/love_PNG42.png" /></a>
                     <p>@Post.NumberOfLove</p>
-             
 
 
-                @if (Level < 4)
-                {
-                    <div class="mx-5">
-                        <a class="mr-3" href="/CreatePost/?SubjectId=@Subject.Id&PostId=@Post.Id">Skriv svar</a>
-                    </div>
-                }
-                else
-                {
-                    <div class="mx-5">
-                        <p>Kan ej besvaras, ytterligare nivåer kan inte skapas i tråden</p>
-                    </div>
-                }
+
+                    @if (Level < 4)
+                    {
+                        <div class="mx-5">
+                            <a class="mr-3" href="/CreatePost/?SubjectId=@Subject.Id&PostId=@Post.Id">Skriv svar</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mx-5">
+                            <p>Kan ej besvaras, ytterligare nivåer kan inte skapas i tråden</p>
+                        </div>
+                    }
 
 
-            </div>
+                </div>
             }
             else
             {
@@ -67,18 +86,3 @@
 
 
 
-@code {
-    [Parameter]
-    public Models.Post Post { get; set; }
-
-    [Parameter]
-    public Models.Subject Subject { get; set; }
-
-    [Parameter]
-    public SnackisApp.Areas.Identity.Data.SnackisUser User { get; set; }
-
-    [Parameter]
-    public int Level { get; set; }
-
-    TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
-}
