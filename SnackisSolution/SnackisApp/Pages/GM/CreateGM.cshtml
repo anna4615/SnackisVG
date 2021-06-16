@@ -1,49 +1,68 @@
 ﻿@page
 @model SnackisApp.Pages.GM.CreateGMModel
 
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+
+@inject UserManager<SnackisUser> _userManager;
 @inject Gateways.IPostGateway _postGateway;
+
 
 @{ List<Models.Post> posts = await _postGateway.GetPosts();
     Models.Post parentPost;
+    SnackisUser currentUser = await _userManager.GetUserAsync(User);
+    bool isMember = Model.Memberships.FirstOrDefault(ms => ms.UserId == currentUser.Id) != null;
 }
 
 
-<h4>Skriv inlägg</h4>
 
-<div class="col">
-    <form method="post" enctype="multipart/form-data">
-        @if (Model.PostId == 0)
-        {
+@if (isMember == false)
+{
+    <br />
+    <br />
+    <p>Du har inte rättighet att göra inlägg i den här gruppen.</p>
+}
+else
+{
+    <h3>@Model.Group.Name</h3>
+
+    <h4>Skriv inlägg</h4>
+
+    <div class="col">
+        <form method="post" enctype="multipart/form-data">
+            @if (Model.PostId == 0)
+            {
+                <div class="form-group">
+                    <label asp-for="Post.Title"></label>
+                    <input asp-for="Post.Title" class="form-control" />
+                    <span asp-validation-for="Post.Title" class="text-danger"></span>
+                </div> }
+            else
+            {
+                <p class="text-hide">@(parentPost = posts.Where(p => p.Id == Model.PostId).FirstOrDefault())</p>
+                <div class="form-group">
+                    <label asp-for="Post.Title"></label>
+                    <input asp-for="Post.Title" class="form-control" type="text" value="Sv: @parentPost.Title" readonly />
+                    <span asp-validation-for="Post.Title" class="text-danger"></span>
+                </div>}
+
             <div class="form-group">
-                <label asp-for="Post.Title"></label>
-                <input asp-for="Post.Title" class="form-control" />
-                <span asp-validation-for="Post.Title" class="text-danger"></span>
-            </div> }
-        else
-        {
-            <p class="text-hide">@(parentPost = posts.Where(p => p.Id == Model.PostId).FirstOrDefault())</p>
+                <label asp-for="Post.Text"></label>
+                <textarea asp-for="Post.Text" class="form-control"></textarea>
+                <span asp-validation-for="Post.Text" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label for="UploadedImage">Bifoga bild</label>
+                <input type="file" name="UploadedImages" multiple />
+            </div>
+
             <div class="form-group">
-                <label asp-for="Post.Title"></label>
-                <input asp-for="Post.Title" class="form-control" type="text" value="Sv: @parentPost.Title" readonly />
-                <span asp-validation-for="Post.Title" class="text-danger"></span>
-            </div>}
-
-        <div class="form-group">
-            <label asp-for="Post.Text"></label>
-            <textarea asp-for="Post.Text" class="form-control"></textarea>
-            <span asp-validation-for="Post.Text" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="UploadedImage">Bifoga bild</label>
-            <input type="file" name="UploadedImages" multiple />
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Spara inlägg" class="btn btn-primary" />
-        </div>
-    </form>
-</div>
+                <input type="submit" value="Spara inlägg" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+}
 
 
 @section Scripts {

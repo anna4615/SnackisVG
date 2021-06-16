@@ -44,7 +44,7 @@ namespace SnackisApp.Pages
                     Name = "Medlem"
                 };
                 await _roleManager.CreateAsync(userRole);
-            }           
+            }
 
             return Page();
         }

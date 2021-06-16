@@ -50,7 +50,7 @@ namespace SnackisApp.Pages.Admin.ForumAdmin
             List<Post> allPosts = await _postGateway.GetPosts();
             Post deletePost = allPosts.FirstOrDefault(p => p.Id == DeleteOffensivePostId || p.Id == DeletePostId);
 
-            // När man tar bort en post deletes även dess svar
+            // När man tar bort en post raderas även dess svar
             if (deletePost.Posts != null)
             {
                 foreach (var postlevel1 in deletePost.Posts)

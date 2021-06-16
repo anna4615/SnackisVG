@@ -44,14 +44,15 @@ namespace SnackisApp.Pages.GM
         {
             SelectedGroup = await _context.Group.Include(g => g.Memberships).FirstOrDefaultAsync(g => g.Id == GroupEditId);
 
-
-           
             MemberNames = new List<string>(); ;
 
             foreach (var membership in SelectedGroup.Memberships)
             {
                 SnackisUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == membership.UserId);
-                MemberNames.Add(user.UserName);
+                if (membership.UserId != SelectedGroup.UserId)
+                {
+                    MemberNames.Add(user.UserName);  //Skaparen av gruppen skall inte vara med på listan av members som kan tas bort
+                }
             }
 
             NotInGroupNames = await GetUserNames(SelectedGroup);
@@ -82,7 +83,7 @@ namespace SnackisApp.Pages.GM
             await _context.SaveChangesAsync();
 
             return Redirect("./index");
-        }       
+        }
 
 
         // Hämta Username för users som inte redan är med i gruppen
@@ -101,7 +102,7 @@ namespace SnackisApp.Pages.GM
             List<SnackisUser> allUsers = _userManager.Users
                .OrderBy(u => u.UserName)
                .ToList();
-            
+
 
             var userNames = new List<string>();
 
@@ -109,7 +110,7 @@ namespace SnackisApp.Pages.GM
             {
                 bool isForumMember = await _userManager.IsInRoleAsync(user, "Medlem");
                 bool notInGroup = members.FirstOrDefault(m => m.Id == user.Id) == null;
-                bool isCurrentUser = currentUser.UserName == user.UserName;
+                bool isCurrentUser = currentUser.UserName == user.UserName; // Skaparen av gruppen skall inte vara med på listan
 
                 if (isForumMember && notInGroup && isCurrentUser == false)
                 {
@@ -141,6 +142,6 @@ namespace SnackisApp.Pages.GM
             var membership = await _context.Membership.FirstOrDefaultAsync(m => m.UserId == member.Id && m.GroupId == group.Id);
 
             group.Memberships.Remove(membership);
-        }       
+        }
     }
 }

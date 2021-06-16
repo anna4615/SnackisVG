@@ -1,37 +1,57 @@
 ﻿@page
 @model SnackisApp.Pages.GM.GMDiscussionModel
 
+
+@using Microsoft.AspNetCore.Identity;
+@using Areas.Identity.Data;
+
+
+@inject UserManager<SnackisUser> _userManager;
+
+
 @{
+    SnackisUser currentUser = await _userManager.GetUserAsync(User);
+    bool isMember = Model.Memberships.FirstOrDefault(ms => ms.UserId == currentUser.Id) != null;
 }
 
-<div class="mb-3">
-    <a asp-page="./CreateGM" asp-route-GroupId="@Model.Group.Id">Skapa inlägg </a>
-</div>
 
-<table class="table table-sm">
-    <tbody>
-        @if (Model.ParentPosts != null)
-        {
-            @foreach (var post in Model.ParentPosts)
+@if (isMember == false)
+{
+    <p>Du är inte medlem i den här gruppen</p>
+}
+else
+{
+    <h4>@Model.Group.Name</h4>
+
+    <div class="my-3">
+        <a class="btn btn-primary btn-sm" asp-page="./CreateGM" asp-route-GroupId="@Model.Group.Id">Skapa inlägg </a>
+    </div>
+
+    <table class="table table-sm">
+        <tbody>
+            @if (Model.ParentPosts != null)
             {
-                <tr class="border-bottom">
-                    <th>
-                        <a asp-page="./GMThread" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
-                    </th>
-                    @if (post.Text != null && post.Text.Length > 100)
-                    {
-                        <td>
-                            @post.Text.Substring(0, 100)...
-                        </td>
- }
+                @foreach (var post in Model.ParentPosts)
+                {
+                    <tr class="border-bottom">
+                        <th>
+                            <a asp-page="./GMThread" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
+                        </th>
+                        @if (post.Text != null && post.Text.Length > 100)
+                        {
+                            <td>
+                                @post.Text.Substring(0, 100)...
+                            </td>
+                        }
 
-                    else
-                    {
-                        <td>
-                            @post.Text
-                        </td>
-               }
-                </tr>
-}}
-    </tbody>
-</table>
+                        else
+                        {
+                            <td>
+                                @post.Text
+                            </td>
+                        }
+                    </tr>
+                }}
+        </tbody>
+    </table>
+}

@@ -17,13 +17,13 @@
 }
 
 
-<div>
-    <a asp-page="/GM/CreateGroup">Skapa ny grupp</a>
+<div class="pt-3">
+    <a class="btn btn-primary btn-sm" asp-page="/GM/CreateGroup">Skapa ny grupp</a>
 </div>
 
 <br />
 
-<h5 class="text-info">Grupper skapade av mig</h5>
+<h4 class="text-info">Grupper skapade av mig</h4>
 @if (Model.MyGroups.Count == 0)
 {
     <p>Inga skapade grupper</p>
@@ -34,13 +34,16 @@ else
     @foreach (var group in Model.MyGroups)
     {
         <div>
-            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" 
+                       param-Group='@group' param-CurrentUser="@currentUser" param-NameIsLink="@true" />
         </div>
         <br />
     }
 }
 
-<h5 class="text-info">Inbjuden till</h5>
+<hr />
+
+<h4 class="text-info">Inbjuden till</h4>
 @if (Model.InvitedToGroups.Count == 0)
 {
     <p>Inga väntande inbjudningar</p>
@@ -50,7 +53,8 @@ else
     @foreach (var group in Model.InvitedToGroups)
     {
         <div>
-            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered"
+                       param-Group='@group' param-CurrentUser="@currentUser" param-NameIsLink="@false"/>
         </div>
 
         <p hidden>@(membership = _context.Membership.FirstOrDefault(ms => ms.UserId == currentUser.Id && ms.GroupId == group.Id))</p>
@@ -62,8 +66,9 @@ else
     }
 }
 
+<hr />
 
-<h5 class="text-info">Mina grupper</h5>
+<h4 class="text-info">Medlem i</h4>
 @if (Model.AcceptedGroups.Count == 0)
 {
     <p>Inte medlem i någon grupp</p>
@@ -73,13 +78,16 @@ else
     @foreach (var group in Model.AcceptedGroups)
     {
         <div>
-            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" 
+                       param-Group='@group' param-CurrentUser="@currentUser" param-NameIsLink="@true"/>
         </div>
 
-        <p hidden>@(membership = _context.Membership.FirstOrDefault(ms => ms.UserId == currentUser.Id && ms.GroupId == group.Id))</p>
-        <a class="btn btn-danger btn-sm mt-1" href="gm/index?DeleteMembershipId=@membership.Id">Lämna</a>
+        @if (group.UserId != currentUser.Id) @*Skaparen av gruppen kan inte lämna den*@
+        {
+            <p hidden>@(membership = _context.Membership.FirstOrDefault(ms => ms.UserId == currentUser.Id && ms.GroupId == group.Id))</p>
+            <a class="btn btn-danger btn-sm mt-1 mb-4" href="gm/index?DeleteMembershipId=@membership.Id">Lämna</a>
+        }
 
-        <br />
         <br />
     }
 }

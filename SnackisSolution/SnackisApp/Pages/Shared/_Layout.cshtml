@@ -6,7 +6,8 @@
 
 @{ ViewData["Title"] = "Home page";
     List<Subject> subjects = _subjectGateway.GetSubjects().Result.ToList();
-    Forum Forum = _forumGateway.GetForums().Result.ToList().FirstOrDefault(); }
+    Forum Forum = _forumGateway.GetForums().Result.ToList().FirstOrDefault(f => f.Name == "Trädgårdssnack");
+    }
 
 <html lang="en">
 <head>

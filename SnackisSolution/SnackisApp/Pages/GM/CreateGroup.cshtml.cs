@@ -56,7 +56,11 @@ namespace SnackisApp.Pages.GM
                 AddMembershipToGroup(Group, name);
             }
 
+            AddMembershipToGroup(Group, currentUser.UserName);
+
             await _context.SaveChangesAsync();
+
+
 
             return Redirect("./index");
         }
@@ -91,12 +95,18 @@ namespace SnackisApp.Pages.GM
         {
             SnackisUser member = _userManager.Users.FirstOrDefault(u => u.UserName == memberName);
 
-            Membership membership = new Membership
+            Membership membership = new Membership();
+
+            membership.UserId = member.Id;
+            membership.GroupId = group.Id;
+            if (Group.UserId == member.Id)  //Skaparen av gruppen behöver inte godkänna medlemsskap
             {
-                UserId = member.Id,
-                GroupId = group.Id,
-                IsAccepted = false
-            };
+                membership.IsAccepted = true; 
+            }
+            else
+            {
+                membership.IsAccepted = false;
+            }
 
             group.Memberships.Add(membership);
         }

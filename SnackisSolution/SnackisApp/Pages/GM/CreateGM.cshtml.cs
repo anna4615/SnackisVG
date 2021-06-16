@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SnackisApp.Areas.Identity.Data;
+using SnackisApp.Data;
 using SnackisApp.Gateways;
 using SnackisApp.Models;
 
@@ -18,15 +19,18 @@ namespace SnackisApp.Pages.GM
         private readonly UserManager<SnackisUser> _userManager;
         private readonly IPostGateway _postGateway;
         private readonly ISubjectGateway _subjectGateway;
+        private readonly SnackisContext _context;
 
         public CreateGMModel(
             UserManager<SnackisUser> userManager,
             IPostGateway postGateway,
-            ISubjectGateway subjectGateway)
+            ISubjectGateway subjectGateway,
+            SnackisContext context)
         {
             _userManager = userManager;
             _postGateway = postGateway;
             _subjectGateway = subjectGateway;
+            _context = context; ;
         }
 
         public List<Post> Posts { get; set; }
@@ -43,15 +47,20 @@ namespace SnackisApp.Pages.GM
         [BindProperty]
         public List<IFormFile> UploadedImages { get; set; }
 
+        public List<Membership> Memberships { get; set; }
 
+        public Group Group { get; set; }
 
         public void OnGet()
         {
+            Group = _context.Group.FirstOrDefault(g => g.Id == GroupId);
+            //Memberships används för att hindra utomstående att gå in på sidan genom att ange ett annat groupId i url:en.
+            Memberships = _context.Membership.Where(ms => ms.GroupId == Group.Id).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);            
 
             //Posten måste ha ett SubjectId eftersom SubjectId inte är nullable, subject "Gruppmeddelande måste alltid finnas, skall skapas när Forumet skapas.
             Subject subject = _subjectGateway.GetSubjects().Result.FirstOrDefault(s => s.Name == "Gruppmeddelande");

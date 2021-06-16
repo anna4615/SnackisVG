@@ -12,10 +12,13 @@ namespace SnackisApp.Pages.Admin
     public class IndexModel : PageModel
     {
         private readonly IForumGateway _forumGateway;
+        private readonly ISubjectGateway _subjectGateway;
 
-        public IndexModel(IForumGateway forumGateway)
+        public IndexModel(IForumGateway forumGateway,
+            ISubjectGateway subjectGateway)
         {
             _forumGateway = forumGateway;
+            _subjectGateway = subjectGateway;
         }
 
         [BindProperty]
@@ -47,9 +50,17 @@ namespace SnackisApp.Pages.Admin
         {
             if (NewForum.Name != null)
             {
-                await _forumGateway.PostForum(NewForum);
-            }            
+                NewForum = await _forumGateway.PostForum(NewForum);
+            }
 
+            Subject subject = new Subject
+            {
+                ForumId = NewForum.Id,
+                Name = "Gruppmeddelande"
+            };
+
+            await _subjectGateway.PostSubject(subject);
+           
             return RedirectToPage("./index");
         }
     }
