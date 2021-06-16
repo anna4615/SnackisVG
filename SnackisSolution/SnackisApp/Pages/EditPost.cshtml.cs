@@ -56,10 +56,17 @@ namespace SnackisApp.Pages
                 startPost = post;
             }
 
-            return Redirect($"/Thread?PostId={startPost.Id}");
+            if (startPost.GroupId == null)
+            {
+                return Redirect($"/Thread?PostId={startPost.Id}");
+            }
+            else
+            {
+                return Redirect($"/GM/GMThread?PostId={startPost.Id}");
+            }
         }
 
 
-       
+
     }
 }
