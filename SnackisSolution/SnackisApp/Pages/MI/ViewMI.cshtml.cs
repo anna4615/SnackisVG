@@ -24,7 +24,7 @@ namespace SnackisApp.Pages.MI
             _context = context;
         }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public string ShowUserName { get; set; }
 
         public MemberInfo MemberInfo { get; set; }
@@ -36,6 +36,16 @@ namespace SnackisApp.Pages.MI
 
         public async Task<IActionResult> OnGetAsync()
         {
+
+            if (ShowUserName != null)
+            {
+                ShowUser = _userManager.Users
+              .FirstOrDefault(u => u.UserName == ShowUserName);
+
+                MemberInfo = _context.MemberInfo
+                    .FirstOrDefault(mi => mi.UserId == ShowUser.Id);
+            }
+
             List<SnackisUser> allUsers = _userManager.Users
                .OrderBy(u => u.UserName)
                .ToList();
@@ -56,9 +66,7 @@ namespace SnackisApp.Pages.MI
         }
 
        public async Task OnPostAsync()
-        {
-           
-
+        {  
             ShowUser = _userManager.Users
                 .FirstOrDefault(u => u.UserName == ShowUserName);
 

@@ -34,7 +34,7 @@ namespace PostsAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            //var post = await _context.Post.Include(p => p.Images).Include(p => p.Posts).FirstOrDefaultAsync(p => p.Id == id); ////Den här tar inte med Posts i Postens svar
+            //var post = await _context.Post.Include(p => p.Images).Include(p => p.Posts).FirstOrDefaultAsync(p => p.Id == id); ////Den här tar inte med all nivåer av svar till appen
 
             var posts = await _context.Post.Include(p => p.Images).ToListAsync();
             var post = posts.FirstOrDefault(p => p.Id == id);

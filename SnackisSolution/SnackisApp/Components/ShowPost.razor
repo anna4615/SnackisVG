@@ -25,15 +25,14 @@
             @if (User != null)
             {
                 <div class="row mx-0">
-                    <img style="max-height: 50px" src="img/@User.Picture" />
-                    <h6 class="mb-1 mx-5">@User.UserName</h6>
-
+                    <a href="/MI/ViewMI?ShowUserName=@User.UserName">
+                        <img style="max-height: 50px" src="img/@User.Picture" />
+                        <h6 class="mb-1 mx-5">@User.UserName</h6>
+                    </a>
                     <a class="mx-2" href="/EditPost/?LikePostId=@Post.Id"><img style="max-height: 20px" src="/img/like_PNG44.png" /></a>
                     <p class="mr-3">@Post.NumberOfLike</p>
                     <a class="mx-2" href="/EditPost/?LovePostId=@Post.Id"><img style="max-height: 20px" src="/img/love_PNG42.png" /></a>
                     <p>@Post.NumberOfLove</p>
-
-
 
                     @if (Level < 4)
                     {
@@ -47,8 +46,6 @@
                             <p>Kan ej besvaras, ytterligare nivåer kan inte skapas i tråden</p>
                         </div>
                     }
-
-
                 </div>
             }
             else
