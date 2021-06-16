@@ -4,7 +4,7 @@
     public Models.Post Post { get; set; }
 
     [Parameter]
-    public Models.Subject Subject { get; set; }
+    public Models.Group Group { get; set; }
 
     [Parameter]
     public SnackisApp.Areas.Identity.Data.SnackisUser User { get; set; }
@@ -17,15 +17,13 @@
 
 
 
-@*<h6>Inlägg på nivå @Level</h6>*@
-
 <div class="col mx-3">
     <div class="border m-2">
         <div class="m-3">
             @if (User != null)
             {
                 <div class="row mx-0">
-                    <img style="max-height: 50px" src="img/@User.Picture" />
+                    <img style="max-height: 50px" src="/img/@User.Picture" />
                     <h6 class="mb-1 mx-5">@User.UserName</h6>
 
                     <a class="mx-2" href="/EditPost/?LikePostId=@Post.Id"><img style="max-height: 20px" src="/img/like_PNG44.png" /></a>
@@ -38,7 +36,7 @@
                     @if (Level < 4)
                     {
                         <div class="mx-5">
-                            <a class="mr-3" href="/CreatePost/?SubjectId=@Subject.Id&PostId=@Post.Id">Skriv svar</a>
+                            <a class="mr-3" href="/GM/CreateGM/?GroupId=@Group.Id&PostId=@Post.Id">Skriv svar</a>
                         </div>
                     }
                     else
@@ -63,29 +61,22 @@
             }
             <p class="small">@TimeZoneInfo.ConvertTimeFromUtc(Post.Date, timeZone).ToString("g")</p> @* g = Datum + tid utan sekunder*@
             <div class="row justify-content-between mx-0">
-                <h5>@Post.Title</h5>
-                @if (Post.IsOffensiv)
-                {
-                    <p class="mr-3 text-danger">Inlägget är anmält för olämpligt innehåll</p>
-                }
-                else
-                {
-                    <a class="mr-3" href="./Report/?ReportPostId=@Post.Id">Anmäl för olämpligt innehåll</a>
-                }
+                <h5>@Post.Title</h5>               
             </div>
             <p>@Post.Text</p>
             @if (Post.Images != null)
             {
-            <div class="row">
-                @foreach (var image in Post.Images)
-                {
-                    <img class="mx-1" style="max-height: 100px" src="postimg/@image.FileName" />
-                }
-            </div>
+                <div class="row">
+                    @foreach (var image in Post.Images)
+                    {
+                        <img class="mx-1" style="max-height: 100px" src="postimg/@image.FileName" />
+                    }
+                </div>
             }
         </div>
     </div>
 </div>
+
 
 
 

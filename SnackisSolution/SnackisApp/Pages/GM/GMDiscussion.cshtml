@@ -1,13 +1,11 @@
 ﻿@page
-@model SnackisApp.Pages.DiscussionModel
+@model SnackisApp.Pages.GM.GMDiscussionModel
+
 @{
-    int NumberOfAnswers = 0;
 }
 
-<h4>@Model.Subject.Name</h4>
-
 <div class="mb-3">
-    <a asp-page="./CreatePost" asp-route-SubjectId="@Model.Subject.Id">Skapa inlägg </a>
+    <a asp-page="./CreateGM" asp-route-GroupId="@Model.Group.Id">Skapa inlägg </a>
 </div>
 
 <table class="table table-sm">
@@ -16,35 +14,24 @@
         {
             @foreach (var post in Model.ParentPosts)
             {
-                NumberOfAnswers = Model.AllPosts.Where(p => p.PostId != null && p.PostId == post.Id).Count();
-
-
                 <tr class="border-bottom">
                     <th>
-                        <a asp-page="/Thread" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
+                        <a asp-page="./GMThread" asp-route-PostId="@post.Id">@Html.DisplayFor(modelItem => post.Title)</a>
                     </th>
                     @if (post.Text != null && post.Text.Length > 100)
                     {
                         <td>
                             @post.Text.Substring(0, 100)...
                         </td>
-                    }
+ }
 
                     else
                     {
                         <td>
                             @post.Text
                         </td>
-                    }
-
-                    <td>
-                        Antal svar: @NumberOfAnswers
-                    </td>
-
+               }
                 </tr>
-
-            }
-        }
+}}
     </tbody>
 </table>
-

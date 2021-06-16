@@ -5,8 +5,8 @@
 @inject Gateways.IForumGateway _forumGateway;
 
 @{ ViewData["Title"] = "Home page";
-                List<Subject> subjects = _subjectGateway.GetSubjects().Result.ToList();
-                Forum Forum = _forumGateway.GetForums().Result.ToList().FirstOrDefault(); }
+    List<Subject> subjects = _subjectGateway.GetSubjects().Result.ToList();
+    Forum Forum = _forumGateway.GetForums().Result.ToList().FirstOrDefault(); }
 
 <html lang="en">
 <head>
@@ -49,9 +49,12 @@
                 @*@<partial name="_SideMenu.cshtml" />*@
                 @foreach (var subject in subjects)
                 {
-                    <div>
-                        <a asp-page="/Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
-                    </div>}
+                    if (subject.Name != "Gruppmeddelande")
+                    {
+                        <div>
+                            <a asp-page="/Discussion" asp-route-SubjectId="@subject.Id">@subject.Name</a>
+                        </div>}
+                    }
                 <hr />
                 <br />
                 <div>
@@ -73,7 +76,7 @@
                 <main role="main" class="pb-3">
                     @if (Forum != null)
                     {
-        <h1 class="text-center">@Forum.Name</h1>}
+                        <h1 class="text-center">@Forum.Name</h1>}
                     @RenderBody()
                 </main>
             </div>

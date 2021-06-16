@@ -1,31 +1,34 @@
 ﻿@page
-@model SnackisApp.Pages.ThreadModel
+@model SnackisApp.Pages.GM.GMThreadModel
 
 @using Microsoft.AspNetCore.Identity;
 @using SnackisApp.Areas.Identity.Data;
 @using SnackisApp.Gateways;
 @using SnackisApp.Models;
+@using SnackisApp.Data;
 
 
 @inject UserManager<SnackisUser> _userManager;
-@inject ISubjectGateway _subjectGateway;
 @inject IPostGateway _postGateway;
+@inject SnackisContext _context;
+
+
 
 @{
     List<Post> allPosts = await _postGateway.GetPosts();
-    Subject subject = await _subjectGateway.GetSubject(Model.StartPost.SubjectId);
+    Group group = _context.Group.FirstOrDefault(g => g.Id == Model.StartPost.GroupId);
     List<SnackisUser> users = _userManager.Users.ToList();
     SnackisUser user;
     TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
 }
 
 
-<h4 class="text-center">@subject.Name</h4>
+<h4 class="text-center">@group.Name</h4>
 
 <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
 <div class="ml-0 pl-0">
-    <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered"
-               param-Post='@Model.StartPost' param-Subject='@subject' param-User="@user" param-level="1" />
+    <component type="typeof(Components.ShowGMPost)" render-mode="ServerPrerendered"
+               param-Post='@Model.StartPost' param-Group='@group' param-User="@user" param-level="1" />
 </div>
 
 
@@ -37,7 +40,8 @@
     {
         <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
         <div class="ml-1 pl-1">
-            <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel1' param-Subject='@subject' param-User="@user" param-level="2" />
+            <component type="typeof(Components.ShowGMPost)" render-mode="ServerPrerendered" 
+                       param-Post='@postLevel1' param-Group='@group' param-User="@user" param-level="2" />
         </div>
         if (postLevel1.Posts != null)
         {
@@ -46,7 +50,8 @@
             {
                 <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
                 <div class="ml-2 pl-2">
-                    <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel2' param-Subject='@subject' param-User="@user" param-level="3" />
+                    <component type="typeof(Components.ShowGMPost)" render-mode="ServerPrerendered"
+                               param-Post='@postLevel2' param-Group='@group' param-User="@user" param-level="3" />
                 </div>
                 if (postLevel2.Posts != null)
                 {
@@ -56,7 +61,8 @@
                     {
                         <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
                         <div class="ml-3 pl-3">
-                            <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel3' param-Subject='@subject' param-User="@user" param-level="4" />
+                            <component type="typeof(Components.ShowGMPost)" render-mode="ServerPrerendered" 
+                                       param-Post='@postLevel3' param-Group='@group' param-User="@user" param-level="4" />
                         </div>
                         if (postLevel3.Posts != null)
                         {
@@ -66,7 +72,8 @@
                             {
                                 <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
                                 <div class="ml-4 pl-4">
-                                    <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel4' param-Subject='@subject' param-User="@user" param-level="5" />
+                                    <component type="typeof(Components.ShowGMPost)" render-mode="ServerPrerendered" 
+                                               param-Post='@postLevel4' param-Group='@group' param-User="@user" param-level="5" />
                                 </div>
                             }
                         }
@@ -76,4 +83,3 @@
         }
     }
 }
-

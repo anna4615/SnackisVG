@@ -126,13 +126,11 @@ namespace PostsAPI.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("PostsAPI.Models.Subject", "Subject")
+                    b.HasOne("PostsAPI.Models.Subject", null)
                         .WithMany("Posts")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("PostsAPI.Models.PostImage", b =>
@@ -146,13 +144,11 @@ namespace PostsAPI.Migrations
 
             modelBuilder.Entity("PostsAPI.Models.Subject", b =>
                 {
-                    b.HasOne("PostsAPI.Models.Forum", "Forum")
+                    b.HasOne("PostsAPI.Models.Forum", null)
                         .WithMany("Subjects")
                         .HasForeignKey("ForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Forum");
                 });
 
             modelBuilder.Entity("PostsAPI.Models.Forum", b =>

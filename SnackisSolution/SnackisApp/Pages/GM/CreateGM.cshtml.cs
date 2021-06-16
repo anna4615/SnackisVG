@@ -11,28 +11,28 @@ using SnackisApp.Areas.Identity.Data;
 using SnackisApp.Gateways;
 using SnackisApp.Models;
 
-namespace SnackisApp.Pages
+namespace SnackisApp.Pages.GM
 {
-    public class CreatePostModel : PageModel
+    public class CreateGMModel : PageModel
     {
         private readonly UserManager<SnackisUser> _userManager;
         private readonly IPostGateway _postGateway;
-        private readonly IOffensiveWordsGateway _offensiveWordsGateway;
+        private readonly ISubjectGateway _subjectGateway;
 
-        public CreatePostModel(
+        public CreateGMModel(
             UserManager<SnackisUser> userManager,
             IPostGateway postGateway,
-            IOffensiveWordsGateway offensiveWordsGateway)
+            ISubjectGateway subjectGateway)
         {
             _userManager = userManager;
             _postGateway = postGateway;
-            _offensiveWordsGateway = offensiveWordsGateway;
+            _subjectGateway = subjectGateway;
         }
 
         public List<Post> Posts { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int SubjectId { get; set; }
+        public int GroupId { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int PostId { get; set; }
@@ -43,6 +43,8 @@ namespace SnackisApp.Pages
         [BindProperty]
         public List<IFormFile> UploadedImages { get; set; }
 
+
+
         public void OnGet()
         {
         }
@@ -51,12 +53,12 @@ namespace SnackisApp.Pages
         {
             var user = await _userManager.GetUserAsync(User);
 
-            string checkedTitle = await _offensiveWordsGateway.GetCheckedText(Post.Title);
-            string checkedText = await _offensiveWordsGateway.GetCheckedText(Post.Text);
-
+            //Posten måste ha ett SubjectId eftersom SubjectId inte är nullable, subject "Gruppmeddelande måste alltid finnas, skall skapas när Forumet skapas.
+            Subject subject = _subjectGateway.GetSubjects().Result.FirstOrDefault(s => s.Name == "Gruppmeddelande");
 
             Post.UserId = user.Id;
-            Post.SubjectId = SubjectId;
+            Post.GroupId = GroupId;
+            Post.SubjectId = subject.Id;
 
             if (PostId != 0)
             {
@@ -67,22 +69,15 @@ namespace SnackisApp.Pages
             {
                 Post.Title = "-----";
             }
-            else
-            {
-                Post.Title = checkedTitle;
-            }
 
-            Post.Text = checkedText;
             Post.Date = DateTime.UtcNow;
-            Post.IsOffensiv = false;
 
             Post createdPost = await _postGateway.PostPost(Post);
 
             // spara bild till wwwroot/postimg          
-            if (UploadedImages != null)
+
+            foreach (IFormFile file in UploadedImages)
             {
-                foreach (IFormFile file in UploadedImages)
-                {
 
                 await _postGateway.PostPostImage(new PostImage
                 {
@@ -90,11 +85,10 @@ namespace SnackisApp.Pages
                     FileName = file.FileName
                 });
 
-                    string fileLocation = $"./wwwroot/postimg/{file.FileName}";
-                    using (FileStream fileStream = new FileStream(fileLocation, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream);
-                    }
+                string fileLocation = $"./wwwroot/postimg/{file.FileName}";
+                using (FileStream fileStream = new FileStream(fileLocation, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
                 }
             }
 
@@ -110,7 +104,8 @@ namespace SnackisApp.Pages
                 startPost = createdPost;
             }
 
-            return Redirect($"/Thread?PostId={startPost.Id}");
+
+            return Redirect($"/GM/GMThread?PostId={startPost.Id}");
         }
     }
 }

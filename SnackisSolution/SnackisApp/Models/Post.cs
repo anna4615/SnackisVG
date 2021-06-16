@@ -21,7 +21,10 @@ namespace SnackisApp.Models
         
         [JsonPropertyName("postId")]
         public int? PostId { get; set; }
-        
+
+        [JsonPropertyName("groupId")]
+        public int? GroupId { get; set; }
+
         [JsonPropertyName("date")]
         public DateTime Date { get; set; }
 

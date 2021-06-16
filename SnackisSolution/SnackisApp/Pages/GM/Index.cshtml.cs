@@ -49,8 +49,6 @@ namespace SnackisApp.Pages.GM
 
         public async Task<IActionResult> OnGetAsync()
         {
-
-            //påverkar skapade listor vilket gör att sidan krashar
             if (AddMembershipId != 0)
             {
                 Membership membership = await _context.Membership.FindAsync(AddMembershipId);

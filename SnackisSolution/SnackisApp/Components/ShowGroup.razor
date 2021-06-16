@@ -20,7 +20,7 @@
 
 <div class="col">
     <div class="row">
-        <h6>@Group.Name</h6>
+        <a href="/GM/GMDiscussion?GroupId=@Group.Id">@Group.Name</a>
         @if (Group.UserId == CurrentUser.Id)
         {
             <a class="ml-3" href="/GM/EditGroup?GroupEditId=@Group.Id">Ändra</a>
