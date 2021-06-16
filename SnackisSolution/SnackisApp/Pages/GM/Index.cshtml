@@ -5,16 +5,15 @@
 @using Areas.Identity.Data;
 @using SnackisApp.Data;
 @using Microsoft.EntityFrameworkCore;
+@using SnackisApp.Models
 
 
-@*@inject UserManager<SnackisUser> _userManager;
-@inject SnackisContext _context;*@
+@inject UserManager<SnackisUser> _userManager;
+@inject SnackisContext _context;
 
 @{
-//List<SnackisUser> allUsers = _userManager.Users.ToList();
-//SnackisUser currentUser = await _userManager.GetUserAsync(User);
-//List<SnackisUser> members;
-//var allGroups = _context.Group.Include(g => g.Members).ToList();
+    SnackisUser currentUser = await _userManager.GetUserAsync(User);
+    Membership membership;
 }
 
 
@@ -23,15 +22,74 @@
 </div>
 
 <br />
-<br />
 
-<h6>Grupper skapade av mig</h6>
-
-@foreach (var group in Model.MyGroups)
+<h5 class="text-info">Grupper skapade av mig</h5>
+@if (Model.MyGroups.Count == 0)
 {
-<div>
-    <a href="/GM/EditGroup?GroupEditId=@group.Id">@group.Name</a>
-</div>
-
+    <p>Inga skapade grupper</p>
 }
+else
+{
+
+    @foreach (var group in Model.MyGroups)
+    {
+        <div>
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+        </div>
+        <br />
+    }
+}
+
+<h5 class="text-info">Inbjuden till</h5>
+@if (Model.InvitedToGroups.Count == 0)
+{
+    <p>Inga väntande inbjudningar</p>
+}
+else
+{
+    @foreach (var group in Model.InvitedToGroups)
+    {
+        <div>
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+        </div>
+
+        <p hidden>@(membership = _context.Membership.FirstOrDefault(ms => ms.UserId == currentUser.Id && ms.GroupId == group.Id))</p>
+        <a class="btn btn-success btn-sm mt-1" href="/gm/index?AddMembershipId=@membership.Id">Acceptera</a>
+        <a class="btn btn-danger btn-sm mt-1" href="gm/index?DeleteMembershipId=@membership.Id">Avfärda</a>
+
+        <br />
+        <br />
+    }
+}
+
+
+<h5 class="text-info">Mina grupper</h5>
+@if (Model.AcceptedGroups.Count == 0)
+{
+    <p>Inte medlem i någon grupp</p>
+}
+else
+{
+    @foreach (var group in Model.AcceptedGroups)
+    {
+        <div>
+            <component type="typeof(Components.ShowGroup)" render-mode="ServerPrerendered" param-Group='@group' param-CurrentUser="@currentUser" />
+        </div>
+
+        <p hidden>@(membership = _context.Membership.FirstOrDefault(ms => ms.UserId == currentUser.Id && ms.GroupId == group.Id))</p>
+        <a class="btn btn-danger btn-sm mt-1" href="gm/index?DeleteMembershipId=@membership.Id">Lämna</a>
+
+        <br />
+        <br />
+    }
+}
+
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
 

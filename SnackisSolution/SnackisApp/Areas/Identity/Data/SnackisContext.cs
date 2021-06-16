@@ -21,6 +21,7 @@ namespace SnackisApp.Data
         public DbSet<MemberInfo> MemberInfo { get; set; }
 
         public DbSet<Group> Group { get; set; }
+        public DbSet<Membership> Membership { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

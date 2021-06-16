@@ -15,6 +15,6 @@ namespace SnackisApp.Models
         [Display(Name = "Namn")]
         [Required(ErrorMessage = "Gruppen måste ha ett namn.")]
         public string Name { get; set; }
-        public virtual ICollection<SnackisUser> Members { get; set; }
+        public virtual ICollection<Membership> Memberships { get; set; }
     }
 }

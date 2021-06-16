@@ -10,18 +10,38 @@
     [Parameter]
     public SnackisUser CurrentUser { get; set; }
 
-    [Parameter]
-    public List<SnackisUser> AllUsers { get; set; }
+    SnackisUser member;
+    SnackisUser creator;
 }
-<h3>ShowGroup</h3>
-<div class="col">
 
-    <h5>@Group.Name</h5>
-    <p>Skapad av: @CurrentUser.UserName</p>
-    <h6>Medlemmar</h6>
-    @foreach (var member in Group.Members)
+
+
+<p hidden>@(creator = _userManager.Users.FirstOrDefault(u => u.Id == Group.UserId))</p>
+
+<div class="col">
+    <div class="row">
+        <h6>@Group.Name</h6>
+        @if (Group.UserId == CurrentUser.Id)
+        {
+            <a class="ml-3" href="/GM/EditGroup?GroupEditId=@Group.Id">Ändra</a>
+        }
+    </div>
+    <p class="mb-0">Skapad av: @creator.UserName</p>
+    <h6 class="mb-0">Medlemmar</h6>
+    @foreach (var membership in Group.Memberships)
     {
-        <p>@member.UserName.</p>
+        member = _userManager.Users.FirstOrDefault(u => u.Id == membership.UserId);
+        <div class="row pl-3">
+            <p class="mb-0">@member.UserName</p>
+            @if (membership.IsAccepted)
+            {
+                <p class="mb-0 ml-3">Accepterat</p>
+            }
+            else
+            {
+                <p class="mb-0 ml-3">Har ännu inte accepterat</p>
+            }
+        </div>
     }
 
 </div>

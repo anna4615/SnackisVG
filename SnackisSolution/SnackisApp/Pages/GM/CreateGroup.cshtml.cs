@@ -46,14 +46,16 @@ namespace SnackisApp.Pages.GM
             var currentUser = await _userManager.GetUserAsync(User);
 
             Group.UserId = currentUser.Id;
-            Group.Members = new List<SnackisUser>();
+            Group.Memberships = new List<Membership>();
+
+            await _context.AddAsync(Group);
+            await _context.SaveChangesAsync(); // SaveChanges för att få gruppens Id
 
             foreach (var name in MemberNames)
             {
-                AddMemberToGroup(Group, name);
+                AddMembershipToGroup(Group, name);
             }
 
-            await _context.AddAsync(Group);
             await _context.SaveChangesAsync();
 
             return Redirect("./index");
@@ -66,7 +68,7 @@ namespace SnackisApp.Pages.GM
 
             List<SnackisUser> allUsers = _userManager.Users
                .OrderBy(u => u.UserName)
-               .ToList();           
+               .ToList();
 
             var userNames = new List<string>();
 
@@ -85,16 +87,18 @@ namespace SnackisApp.Pages.GM
             return userNames;
         }
 
-        private void AddMemberToGroup(Group group, string memberName)
+        private void AddMembershipToGroup(Group group, string memberName)
         {
-            //Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == 2);
-            //Group group = _context.Group.Include(g => g.Members).FirstOrDefault(g => g.Id == GroupId);
-
             SnackisUser member = _userManager.Users.FirstOrDefault(u => u.UserName == memberName);
 
-            group.Members.Add(member);
-           // await _context.SaveChangesAsync();
+            Membership membership = new Membership
+            {
+                UserId = member.Id,
+                GroupId = group.Id,
+                IsAccepted = false
+            };
 
+            group.Memberships.Add(membership);
         }
     }
 }

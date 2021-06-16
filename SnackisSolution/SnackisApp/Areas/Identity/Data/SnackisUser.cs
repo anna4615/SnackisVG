@@ -24,7 +24,7 @@ namespace SnackisApp.Areas.Identity.Data
         [PersonalData]
         public string Picture { get; set; }
 
-        public ICollection<Group> Groups { get; set; }
+        public ICollection<Membership> MemberShips { get; set; }
 
     }
 }
