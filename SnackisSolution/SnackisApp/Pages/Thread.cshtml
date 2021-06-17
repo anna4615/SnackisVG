@@ -35,7 +35,7 @@
     List<Post> answers1 = Model.StartPost.Posts;
     foreach (Post postLevel1 in answers1)
     {
-        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == postLevel1.UserId))</p>
         <div class="ml-1 pl-1">
             <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel1' param-Subject='@subject' param-User="@user" param-level="2" />
         </div>
@@ -44,7 +44,7 @@
             List<Post> answers2 = postLevel1.Posts;
             foreach (Post postLevel2 in answers2)
             {
-                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == postLevel2.UserId))</p>
                 <div class="ml-2 pl-2">
                     <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel2' param-Subject='@subject' param-User="@user" param-level="3" />
                 </div>
@@ -54,7 +54,7 @@
                         answers3 = postLevel2.Posts;
                     foreach (Post postLevel3 in answers3)
                     {
-                        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                        <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == postLevel3.UserId))</p>
                         <div class="ml-3 pl-3">
                             <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel3' param-Subject='@subject' param-User="@user" param-level="4" />
                         </div>
@@ -64,7 +64,7 @@
                                 answers4 = postLevel3.Posts;
                             foreach (Post postLevel4 in answers4)
                             {
-                                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == Model.StartPost.UserId))</p>
+                                <p class="text-hide m-0">@(user = users.FirstOrDefault(u => u.Id == postLevel4.UserId))</p>
                                 <div class="ml-4 pl-4">
                                     <component type="typeof(Components.ShowPost)" render-mode="ServerPrerendered" param-Post='@postLevel4' param-Subject='@subject' param-User="@user" param-level="5" />
                                 </div>
