@@ -9,6 +9,7 @@ namespace SnackisApp.Models
     public class MemberInfo
     {
         public int Id { get; set; }
+
         public string UserId { get; set; }
 
         [Display(Name = "Text till din infosida")]

@@ -37,8 +37,9 @@ namespace PostsAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiscussionsAPI", Version = "v1" });
             });
 
+            // För Dependency Injection av context för databas "Snackis"      
             services.AddDbContext<SnackisContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("LocalSnackisContext")));       
+                    options.UseSqlServer(Configuration.GetConnectionString("LocalSnackisContext"))); 
 
         }
 

@@ -15,6 +15,7 @@ namespace SnackisApp.Models
         [JsonPropertyName("forbiddenWord")]
         [Display(Name = "Ord")]
         [Required(ErrorMessage = "Fältet kan inte vara tomt")]
+
         public string Word { get; set; }
     }
 }

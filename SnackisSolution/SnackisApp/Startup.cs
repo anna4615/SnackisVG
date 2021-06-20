@@ -36,12 +36,20 @@ namespace SnackisApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });           
 
+            //För Dependency Injection av context för databas "Snackis"
+            services.AddDbContext<SnackisContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext"))); 
+
+            //För DI av Gateways
             services.AddScoped<IForumGateway, ForumGateway>();
             services.AddScoped<ISubjectGateway, SubjectGateway>();
             services.AddScoped<IPostGateway, PostGateway>();
             services.AddScoped<IOffensiveWordsGateway, OffensiveWordsGateway>();
+
+            //För DI av klassen Content som innehåller metoder för att skapa testdata
             services.AddScoped<Content>();
 
+            //För DI av HTTP-klient
             services.AddHttpClient<ForumGateway>();
             services.AddHttpClient<SubjectGateway>();
             services.AddHttpClient<PostGateway>();
@@ -64,8 +72,6 @@ namespace SnackisApp
                 options.Conventions.AuthorizePage("/PM/ViewPM", "MustBeMember");
             });
 
-            services.AddDbContext<SnackisContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext")));
 
 
 

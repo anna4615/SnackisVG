@@ -15,10 +15,13 @@ namespace SnackisApp.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
+            //För Dependency Injection av context för databas "Snackis"
+            builder.ConfigureServices((context, services) =>
+            {
                 services.AddDbContext<SnackisContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("SnackisContext")));
+
 
                 services.AddDefaultIdentity<SnackisUser>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddRoles<IdentityRole>()

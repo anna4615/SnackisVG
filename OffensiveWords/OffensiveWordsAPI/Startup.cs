@@ -35,8 +35,9 @@ namespace OffensiveWordsAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OffensiveWordsAPI", Version = "v1" });
             });
 
+            //För Dependency Injection av context för databas "Snackis"
             services.AddDbContext<SnackisContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("SnackisContext"))); 
 
            
         }
