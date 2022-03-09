@@ -42,6 +42,7 @@ namespace SnackisApp.Pages.Admin.UserAdmin
 
         public bool IsLastAdmin { get; set; }
         public bool MemberIsAdmin { get; set; }
+        public bool MemberIsOriginalAdmin { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync()
@@ -60,15 +61,26 @@ namespace SnackisApp.Pages.Admin.UserAdmin
 
             if (RemoveUserId != null)
             {
+                SnackisUser user = await _userManager.FindByIdAsync(RemoveUserId);
+
+                //Not possible to remove admin rights from admin assount
+                if (Role == "Admin" && user.UserName == "admin")
+                {
+                    MemberIsOriginalAdmin = true;
+                    return Page();
+                }
+
+                //At least admin and one additional user must have role "Admin"
                 if (Role == "Admin")
                 {
-                    if (numberOfAdmins <= 1)
+                    if (numberOfAdmins <= 2)
                     {
                         IsLastAdmin = true;
                         return Page();
                     }
                 }
 
+                //Not possible to remove the role "Medlem" from Admin
                 if (Role == "Medlem")
                 {
                     MemberIsAdmin = _userManager.GetUsersInRoleAsync("Admin").Result.ToList().FirstOrDefault(u => u.Id == RemoveUserId) != null;
@@ -80,9 +92,7 @@ namespace SnackisApp.Pages.Admin.UserAdmin
 
                 }
 
-                SnackisUser user = await _userManager.FindByIdAsync(RemoveUserId);
                 IdentityResult result = await _userManager.RemoveFromRoleAsync(user, Role);
-
             }
 
             if (AddUserId != null)

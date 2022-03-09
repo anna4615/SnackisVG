@@ -17,16 +17,21 @@
         <div class="col-md-auto">
             <h1 class="text-center mb-5">Användaradmin</h1>
 
+            @if (Model.MemberIsOriginalAdmin)
+            {
+                <h3 class="text-danger">Det går inte att ta bort rollen "Admin" från användare admin</h3>
+            }
 
             @if (Model.IsLastAdmin)
             {
-                <h3 class="text-danger">Det går inte att ta bort sista admin</h3>
+                <h3 class="text-danger">Minst ett personligt konto måste ha Admin-rättigheter</h3>
             }
 
             @if (Model.MemberIsAdmin)
             {
-                <h3 class="text-danger">Det går inte att ta bort rollen medlem från admin</h3>
+                <h3 class="text-danger">Det går inte att ta bort rollen "Medlem" från en användare med Admin-rättigheter</h3>
             }
+
 
 
 

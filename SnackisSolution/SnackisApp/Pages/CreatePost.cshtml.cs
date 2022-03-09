@@ -84,11 +84,11 @@ namespace SnackisApp.Pages
                 foreach (IFormFile file in UploadedImages)
                 {
 
-                await _postGateway.PostPostImage(new PostImage
-                {
-                    PostId = createdPost.Id,
-                    FileName = file.FileName
-                });
+                    await _postGateway.PostPostImage(new PostImage
+                    {
+                        PostId = createdPost.Id,
+                        FileName = file.FileName
+                    });
 
                     string fileLocation = $"./wwwroot/postimg/{file.FileName}";
                     using (FileStream fileStream = new FileStream(fileLocation, FileMode.Create))

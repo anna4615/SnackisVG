@@ -4,10 +4,8 @@
 
 
 @inject Gateways.IPostGateway _postGateway;
-@{
-    List<Models.Post> posts = await _postGateway.GetPosts();
-    Models.Post parentPost;
- }
+@{ List<Models.Post> posts = await _postGateway.GetPosts();
+    Models.Post parentPost; }
 
 
 
@@ -17,19 +15,20 @@
     <form method="post" enctype="multipart/form-data">
         @if (Model.PostId == 0)
         {
-    <div class="form-group">
-        <label asp-for="Post.Title"></label>
-        <input asp-for="Post.Title" class="form-control" />
-        <span asp-validation-for="Post.Title" class="text-danger"></span>
-    </div> }
-else
-{
-    <p class="text-hide">@(parentPost = posts.Where(p => p.Id == Model.PostId).FirstOrDefault())</p>
-                    <div class="form-group">
-                        <label asp-for="Post.Title"></label>
-                        <input asp-for="Post.Title" class="form-control" type="text" value="Sv: @parentPost.Title" readonly />
-                        <span asp-validation-for="Post.Title" class="text-danger"></span>
-                    </div>}
+            <div class="form-group">
+                <label asp-for="Post.Title"></label>
+                <input asp-for="Post.Title" class="form-control" />
+                <span asp-validation-for="Post.Title" class="text-danger"></span>
+            </div> }
+        else
+        {
+            <p class="text-hide">@(parentPost = posts.Where(p => p.Id == Model.PostId).FirstOrDefault())</p>
+                <div class="form-group">
+                    <label asp-for="Post.Title"></label>
+                    <input asp-for="Post.Title" class="form-control" type="text" value="Sv: @parentPost.Title" readonly />
+                    <span asp-validation-for="Post.Title" class="text-danger"></span>
+                </div>
+        }
 
         <div class="form-group">
             <label asp-for="Post.Text"></label>
@@ -39,7 +38,7 @@ else
 
         <div>
             <label for="UploadedImage">Bifoga bild</label>
-            <input type="file" name="UploadedImages" multiple/>
+            <input type="file" name="UploadedImages" multiple />
         </div>
 
         <div class="form-group">
