@@ -43,6 +43,7 @@ namespace SnackisApp.Pages.Admin.UserAdmin
         public bool IsLastAdmin { get; set; }
         public bool MemberIsAdmin { get; set; }
         public bool MemberIsOriginalAdmin { get; set; }
+        public bool MemberIsStina { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync()
@@ -63,10 +64,17 @@ namespace SnackisApp.Pages.Admin.UserAdmin
             {
                 SnackisUser user = await _userManager.FindByIdAsync(RemoveUserId);
 
-                //Not possible to remove admin rights from admin assount
+                //Not possible to remove admin rights from admin account
                 if (Role == "Admin" && user.UserName == "admin")
                 {
                     MemberIsOriginalAdmin = true;
+                    return Page();
+                }
+
+                //Not possible to remove admin rights from stinas account
+                if (Role == "Admin" && user.UserName == "stina")
+                {
+                    MemberIsStina = true;
                     return Page();
                 }
 

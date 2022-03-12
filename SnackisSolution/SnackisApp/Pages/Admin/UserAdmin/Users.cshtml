@@ -19,18 +19,20 @@
 
             @if (Model.MemberIsOriginalAdmin)
             {
-                <h3 class="text-danger">Det går inte att ta bort rollen "Admin" från användare admin</h3>
+        <h3 class="text-danger">Det går inte att ta bort rollen "Admin" från användare admin</h3>            }
+
+            @if (Model.MemberIsStina)
+            {
+                <h3 class="text-danger">Det går inte att ta bort rollen "Admin" från användare stina</h3>
             }
 
             @if (Model.IsLastAdmin)
             {
-                <h3 class="text-danger">Minst ett personligt konto måste ha Admin-rättigheter</h3>
-            }
+        <h3 class="text-danger">Minst ett personligt konto måste ha Admin-rättigheter</h3>            }
 
             @if (Model.MemberIsAdmin)
             {
-                <h3 class="text-danger">Det går inte att ta bort rollen "Medlem" från en användare med Admin-rättigheter</h3>
-            }
+        <h3 class="text-danger">Det går inte att ta bort rollen "Medlem" från en användare med Admin-rättigheter</h3>            }
 
 
 
@@ -53,8 +55,7 @@
 
                         @foreach (var role in allRoles)
                         {
-                            <th>@role.Name</th>
-                        }
+            <th>@role.Name</th>}
 
                     </tr>
                 </thead>
@@ -64,33 +65,30 @@
                     {
                         if (await UserManager.IsInRoleAsync(user, "Admin"))
                         {
-                            <tr class="border-bottom">
-                                <td>
-                                    <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.UserName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.PhoneNumber)
-                                </td>
+        <tr class="border-bottom">
+            <td>
+                <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.PhoneNumber)
+            </td>
 
-                                @foreach (var role in allRoles)
+            @foreach (var role in allRoles)
+            {
+                if (await UserManager.IsInRoleAsync(user, role.Name))
+                {
+        <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td> }
+                                else
                                 {
-                                    if (await UserManager.IsInRoleAsync(user, role.Name))
-                                    {
-                                        <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>
-                                    }
-                                }
-                            </tr>
-                        }
+        <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>}
+                            }
+        </tr>}
                     }
                 </tbody>
             </table>
@@ -99,69 +97,64 @@
             {
                 if (allRoles[i].Name != "Admin")
                 {
-                    <h4>@allRoles[i].Name</h4>
+        <h4>@allRoles[i].Name</h4>
 
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>
-                                    Användarnamn
-                                </th>
-                                <th>
-                                    Epost
-                                </th>
-                                <th>
-                                    Telefon
-                                </th>
-
-                                @foreach (var role in allRoles)
-                                {
-                                    <th>@role.Name</th>
-                                }
-
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var user in allUsers)
-                            {
-                                bool isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
-
-                                if (isAdmin == false && await UserManager.IsInRoleAsync(user, allRoles[i].Name))
-                                {
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => user.UserName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => user.Email)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => user.PhoneNumber)
-                                        </td>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            Användarnamn
+                                        </th>
+                                        <th>
+                                            Epost
+                                        </th>
+                                        <th>
+                                            Telefon
+                                        </th>
 
                                         @foreach (var role in allRoles)
                                         {
-                                            if (await UserManager.IsInRoleAsync(user, role.Name))
-                                            {
-                                                <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td>
-                                            }
-                                            else
-                                            {
-                                                <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>
-                                            }
-                                        }
+                    <th>@role.Name</th>}
+
                                     </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                }
-            }
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var user in allUsers)
+                                    {
+                                        bool isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+
+                                        if (isAdmin == false && await UserManager.IsInRoleAsync(user, allRoles[i].Name))
+                                        {
+                <tr class="border-bottom">
+                    <td>
+                        <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.PhoneNumber)
+                    </td>
+
+                    @foreach (var role in allRoles)
+                    {
+                        if (await UserManager.IsInRoleAsync(user, role.Name))
+                        {
+        <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td> }
+                                        else
+                                        {
+        <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>}
+                                    }
+                </tr>}
+                                    }
+                                </tbody>
+                            </table>                }
+                                        }
 
 
             <h4>Avstängda</h4>
@@ -182,8 +175,7 @@
 
                         @foreach (var role in allRoles)
                         {
-                            <th>@role.Name</th>
-                        }
+            <th>@role.Name</th>}
 
                     </tr>
                 </thead>
@@ -199,33 +191,30 @@
 
                         if (isBlocked)
                         {
-                            <tr class="border-bottom">
-                                <td>
-                                    <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.UserName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.PhoneNumber)
-                                </td>
+        <tr class="border-bottom">
+            <td>
+                <img style="max-height: 30px" src="~/img/@user.Picture" title="Användarbild" alt="Användarbild" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.PhoneNumber)
+            </td>
 
-                                @foreach (var role in allRoles)
+            @foreach (var role in allRoles)
+            {
+                if (await UserManager.IsInRoleAsync(user, role.Name))
+                {
+        <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td> }
+                                else
                                 {
-                                    if (await UserManager.IsInRoleAsync(user, role.Name))
-                                    {
-                                        <td>&nbsp&nbsp&#10003&nbsp&nbsp&nbsp<a href="?RemoveUserId=@user.Id&Role=@role.Name"> Ta&nbspbort&nbsp&nbsp</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>
-                                    }
-                                }
-                            </tr>
-                        }
+        <td>&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp<a href="?AddUserId=@user.Id&Role=@role.Name"> Lägg&nbsptill&nbsp&nbsp</a></td>}
+                            }
+        </tr>}
                     }
                 </tbody>
             </table>

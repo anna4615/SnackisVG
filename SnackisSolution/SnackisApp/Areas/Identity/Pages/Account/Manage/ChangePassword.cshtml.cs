@@ -29,6 +29,8 @@ namespace SnackisApp.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public bool  MemberIsStina { get; set; }
+
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -54,6 +56,15 @@ namespace SnackisApp.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            
+            //Vill förhindra att lösenordet för stina kan ändras eftersom jag vill lämna ut det till besökare
+            //utan att riskera besökaren ändrar lösenordet
+            if (user.UserName == "stina")
+            {
+                MemberIsStina = true;
+                return Page();
+            }
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
